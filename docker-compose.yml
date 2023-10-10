@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    image: nixel666/infomania_admin
+    env_file:
+      - .env
+    ports:
+      - "3005:80"
