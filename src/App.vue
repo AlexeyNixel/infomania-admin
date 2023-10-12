@@ -1,4 +1,7 @@
 <script setup lang='ts'>
+import { useEntryStore } from '@/stores/entry';
+import { onBeforeMount } from 'vue';
+
 const buttons = [
   {
     title: 'Новости',
@@ -21,12 +24,18 @@ const buttons = [
     create: 'slidesCreate',
   },
 ];
+
+const entryStore = useEntryStore()
+
+onBeforeMount(async () => {
+  await entryStore.createEntry({})
+})
 </script>
 
 <template>
   <div class='admin'>
     <div class='aside'>
-      <div class='aside__title'>INFOMANIA</div>
+      <a href='http://dev.infomania.ru'  class='aside__title'>INFOMANIA</a>
       <div class='aside__item' v-for='(item, index) in buttons' :key='index'>
         <div class='aside__menu'>{{ item.title }}</div>
         <div class='aside__link'>
@@ -64,6 +73,7 @@ const buttons = [
     font-weight: bold;
     font-size: 2vw;
     height: 8%;
+    color: white;
   }
 
   &__item {

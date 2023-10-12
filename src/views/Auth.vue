@@ -13,12 +13,11 @@ const user = ref({
   password: '',
 });
 
-const handleAuth = async (account: object) => {
-  status.value = await auth(account)
+const handleAuth = async () => {
+  status.value = await auth(user.value)
   if (status.value.data) {
     localStorage.setItem('token', status.value.data.access_token)
     adminStore.token = status.value.data.access_token
-
     await router.push({name:'index'})
   }
 }
@@ -26,7 +25,7 @@ const handleAuth = async (account: object) => {
 
 <template>
   <div class='wrapper'>
-    <el-form class='login-form'>
+    <el-form class='login-form' @keydown.enter='handleAuth()'>
       <div class='login-form__title'>Авторизация</div>
       <div class='login-form__field'>
         <span>Логин</span>
@@ -36,7 +35,7 @@ const handleAuth = async (account: object) => {
         <span>Пароль</span>
         <el-input type='password' show-password v-model='user.password' />
       </div>
-      <el-button @click='handleAuth(user)'>Войти</el-button>
+      <el-button @click='handleAuth()'>Войти</el-button>
     </el-form>
   </div>
 </template>

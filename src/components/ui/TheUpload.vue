@@ -8,43 +8,46 @@ type PropsType = {
   currentImage?: string
 }
 
-const props = defineProps<PropsType>()
-const staticUrl = ref(import.meta.env["VITE_STATIC_URL"]);
-const uploadUrl = ref(import.meta.env["VITE_BASE_UPLOAD_URL"]);
-const preview = ref<string>(props.currentImage!)
-const handleAvatarSuccess: UploadProps["onSuccess"] = (response) => {
-  console.log(response);
+const props = defineProps<PropsType>();
+
+const newImage = ref<string>();
+const preview = ref<string>(props.currentImage!);
+const staticUrl = ref(import.meta.env['VITE_STATIC_URL']);
+const uploadUrl = ref(import.meta.env['VITE_BASE_UPLOAD_URL']);
+
+const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
+  newImage.value = response.path;
   preview.value = response.path;
-  handleChangeValue(response.id)
-};
-const headers = {
-  "Authorization": `Bearer ${localStorage.getItem("token")}`
+  handleChangeValue(response.id);
 };
 
-const emit = defineEmits(["update:modelValue"]);
+const headers = {
+  'Authorization': `Bearer ${localStorage.getItem('token')}`,
+};
+
+const emit = defineEmits(['update:modelValue']);
 const handleChangeValue = (value: string) => {
-  emit("update:modelValue", value);
+  emit('update:modelValue', value);
 };
 
 watch(props, () => {
-  preview.value = props.currentImage as string
-})
-
+  preview.value = newImage.value || props.currentImage as string;
+});
 </script>
 
 <template>
   <el-upload
-    class="entry-create__top-preview"
-    :action="uploadUrl"
-    accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
-    :show-file-list="false"
-    :on-success="handleAvatarSuccess"
-    :headers="headers"
-    :model-value="modelValue"
-    @update:model-value="handleChangeValue"
+    class='entry-create__top-preview'
+    :action='uploadUrl'
+    accept='.jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF'
+    :show-file-list='false'
+    :on-success='handleAvatarSuccess'
+    :headers='headers'
+    :model-value='modelValue'
+    @update:model-value='handleChangeValue'
   >
-    <img v-if="preview"  :src="`${staticUrl}${preview}`" class="avatar" alt=""  />
-    <el-icon v-else class="avatar-uploader-icon">
+    <img v-if='preview' :src='`${staticUrl}${preview}`' class='avatar' alt='' />
+    <el-icon v-else class='avatar-uploader-icon'>
       <Plus />
     </el-icon>
   </el-upload>

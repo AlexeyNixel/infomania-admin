@@ -42,7 +42,7 @@ const handleUpdate = async () => {
           />
         </div>
         <div class='department-update__btn'>
-          <el-button @click='handleUpdate'>Обновить</el-button>
+          <el-button @click='handleUpdate'>Создать</el-button>
         </div>
       </div>
     </div>

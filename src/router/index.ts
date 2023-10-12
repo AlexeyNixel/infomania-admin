@@ -10,12 +10,12 @@ const router = createRouter({
     {
       path: '/',
       name: 'index',
-      component: import('../views/entry/EntryList.vue'),
+      component: () => import('../views/entry/EntryList.vue'),
     },
     {
       path: '/login',
       name: 'auth',
-      component: import('../views/Auth.vue'),
+      component: () => import('../views/Auth.vue'),
     },
     ...entryRoute,
     ...departmentRoute,
@@ -23,5 +23,13 @@ const router = createRouter({
     ...documentRoute,
   ],
 });
+
+router.beforeEach( (to, from, next) => {
+  if (!localStorage.getItem('token') && to.name !== 'auth') {
+    return next({name:'auth'})
+  } else {
+    return next()
+  }
+})
 
 export default router;

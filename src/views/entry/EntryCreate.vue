@@ -76,7 +76,7 @@ const handleUpdateData = async () => {
       <el-button>Документ</el-button>
     </div>
     <div class='button'>
-      <el-button @click='handleUpdateData'>Обновить</el-button>
+      <el-button @click='handleUpdateData'>Создать</el-button>
     </div>
   </div>
 </template>
