@@ -1,6 +1,8 @@
 <script setup lang='ts'>
 import { useEntryStore } from '@/stores/entry';
 import { onBeforeMount } from 'vue';
+import { useAdminStore } from '@/stores/admin';
+import { storeToRefs } from 'pinia';
 
 const buttons = [
   {
@@ -25,17 +27,20 @@ const buttons = [
   },
 ];
 
-const entryStore = useEntryStore()
+const entryStore = useEntryStore();
+const adminStore = useAdminStore();
+const { username } = storeToRefs(adminStore);
 
 onBeforeMount(async () => {
-  await entryStore.createEntry({})
-})
+  await entryStore.createEntry({});
+});
 </script>
 
 <template>
   <div class='admin'>
     <div class='aside'>
-      <a href='http://dev.infomania.ru'  class='aside__title'>INFOMANIA</a>
+      <a href='http://dev.infomania.ru' class='aside__title'>INFOMANIA</a>
+      <div class='aside__username'>{{ username }}</div>
       <div class='aside__item' v-for='(item, index) in buttons' :key='index'>
         <div class='aside__menu'>{{ item.title }}</div>
         <div class='aside__link'>
@@ -72,8 +77,13 @@ onBeforeMount(async () => {
     text-align: center;
     font-weight: bold;
     font-size: 2vw;
-    height: 8%;
+    height: 4%;
     color: white;
+  }
+
+  &__username {
+    text-align: center;
+    font-size: 1vw;
   }
 
   &__item {

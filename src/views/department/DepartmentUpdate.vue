@@ -1,11 +1,13 @@
 <script setup lang='ts'>
 import { useDepartmentStore } from '@/stores/department';
 import { onMounted, reactive, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import TheUpload from '@/components/ui/TheUpload.vue';
 import { Delete } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus';
 
 const route = useRoute();
+const router = useRouter();
 const departmentStore = useDepartmentStore();
 
 const preview = ref<string>();
@@ -18,13 +20,19 @@ const department = reactive<any>({
 
 const handleUpdate = async () => {
   await departmentStore.updateDepartment(route.params.slug as string, department);
+  ElMessage({
+    message: 'Отдел обновлен',
+    type: 'success',
+  });
+  await router.push({name:'department'})
 };
 
 onMounted(async () => {
   const { data } = await departmentStore.getDepartment(route.params.slug as string, {
     include: 'preview',
+    isDeleted:true
   });
-  preview.value = data.preview.path;
+  preview.value = data.preview?.path;
   Object.keys(department).forEach((key) => {
     department[key] = data[key];
   });

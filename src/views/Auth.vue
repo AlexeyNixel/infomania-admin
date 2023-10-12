@@ -1,12 +1,13 @@
 <script setup lang='ts'>
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { auth } from '@/api/admin';
 import { useAdminStore } from '@/stores/admin';
 import { useRouter } from 'vue-router';
+import { axiosApi } from '@/api/axios';
 
-const router = useRouter()
-const status = ref<any>()
-const adminStore = useAdminStore()
+const router = useRouter();
+const status = ref<any>();
+const adminStore = useAdminStore();
 
 const user = ref({
   username: '',
@@ -14,13 +15,20 @@ const user = ref({
 });
 
 const handleAuth = async () => {
-  status.value = await auth(user.value)
+  status.value = await auth(user.value);
   if (status.value.data) {
-    localStorage.setItem('token', status.value.data.access_token)
     adminStore.token = status.value.data.access_token
-    await router.push({name:'index'})
+    adminStore.username = status.value.data.username
+    localStorage.setItem('token', adminStore.token);
+    localStorage.setItem('username', adminStore.username);
+    axiosApi.defaults.headers.common['Authorization'] = `Bearer ${adminStore.token}`;
+    await router.push({ name: 'index' });
   }
-}
+};
+
+onBeforeMount(async () => {
+
+})
 </script>
 
 <template>

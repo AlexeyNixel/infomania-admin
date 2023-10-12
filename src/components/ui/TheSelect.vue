@@ -27,7 +27,7 @@ onMounted(async () => {
     });
     content.value = data;
   } else {
-    const { data } = await adminStore.getAllModel(`api/${props.entryOrder}/`, {});
+    const { data } = await adminStore.getAllModel(`api/${props.entryOrder}/`, {isDeleted: true});
     content.value = data;
   }
 });

@@ -23,7 +23,7 @@ const fetchData = async (val?: number) => {
   }
 
   const { data, meta } = await entryStore.getEntries({
-    include:'rubrics',
+    include: 'rubrics',
     pageSize: 30,
     isDeleted: true,
     page: page.value,
@@ -45,11 +45,11 @@ onMounted(async () => {
       <div class='list__field-long'>Название</div>
       <div class='list__field'>Дата</div>
       <div class='list__field'>Статус</div>
-      <div class='list__field'>Обновить</div>
+      <div class='list__field'>Ссылка</div>
     </div>
     <el-scrollbar>
       <div class='list-item' v-for='entry in entries' :key='entry.id'>
-        <div class='list-item__field-long'>{{ entry.title }}</div>
+        <router-link :to='{name:"entryUpdate", params:{slug: entry.slug}}' class='list-item__field-long'>{{ entry.title }}</router-link>
         <div class='list-item__field'>
           {{ dayjs(entry.publishedAt).format('DD.MM.YYYY') }}
         </div>
@@ -61,11 +61,11 @@ onMounted(async () => {
             size='large' />
         </div>
         <div class='list-item__field'>
-          <el-button
-            @click='router.push({name:"entryUpdate", params:{slug:entry.slug}})'
+          <a
+            :href='`http://dev.infomania.ru/entry/${entry.slug}`'
           >
-            Обновить
-          </el-button>
+            <img style='width: 30px; color:white;' src='/external-link.svg' alt=''>
+          </a>
         </div>
       </div>
     </el-scrollbar>

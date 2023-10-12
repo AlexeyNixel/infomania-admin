@@ -3,11 +3,13 @@ import TheEditor from '@/components/ui/TheEditor.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
 import { useDocumentStore } from '@/stores/document';
 import { onMounted, reactive, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 
 const documentStore = useDocumentStore();
 const content = ref<any>();
 const route = useRoute();
+const router = useRouter();
 const menus = ref<any>();
 
 const document = reactive<any>({
@@ -18,6 +20,11 @@ const document = reactive<any>({
 
 const handleUpdate = async () => {
   await documentStore.updateDocument(route.params.slug as string, document);
+  ElMessage({
+    message: 'Документ обновлен',
+    type: 'success',
+  });
+  await router.push({name:'documents'})
 };
 
 onMounted(async () => {
@@ -26,6 +33,7 @@ onMounted(async () => {
   Object.keys(document).forEach((key) => {
     document[key] = content.value[key];
   });
+
 });
 </script>
 

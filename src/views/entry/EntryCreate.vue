@@ -1,12 +1,14 @@
 <script setup lang='ts'>
 import { useEntryStore } from '@/stores/entry';
-import { onMounted, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import TheEditor from '@/components/ui/TheEditor.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
 import TheUpload from '@/components/ui/TheUpload.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 
 const route = useRoute();
+const router = useRouter();
 const entryStore = useEntryStore();
 const content = ref<any>();
 const preview = ref();
@@ -18,14 +20,17 @@ const entry = reactive<any>({
   rubrics: [],
   fileId: '',
   departmentId: '',
-  publishedAt: '',
+  publishedAt: new Date,
   isDeleted: false,
 });
 
-
-const handleUpdateData = async () => {
-  console.log(entry);
+const handleCreateData = async () => {
   await entryStore.createEntry(entry);
+  ElMessage({
+    message: 'Новость создана',
+    type: 'success',
+  });
+  await router.push({name:'entries'})
 };
 
 </script>
@@ -59,13 +64,17 @@ const handleUpdateData = async () => {
       <TheEditor v-model='entry.content' />
     </div>
     <div class='department'>
+      <div>Отдел</div>
       <the-select v-model='entry.departmentId' entryOrder='department' />
     </div>
     <div class='rubric'>
+      <div>Рубрики</div>
       <the-select v-model='entry.rubrics' entryOrder='rubric' />
     </div>
     <div class='date'>
+      <div>Дата</div>
       <el-date-picker
+
         v-model='entry.publishedAt'
       />
     </div>
@@ -76,7 +85,7 @@ const handleUpdateData = async () => {
       <el-button>Документ</el-button>
     </div>
     <div class='button'>
-      <el-button @click='handleUpdateData'>Создать</el-button>
+      <el-button @click='handleCreateData'>Создать</el-button>
     </div>
   </div>
 </template>

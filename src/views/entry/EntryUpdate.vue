@@ -4,9 +4,11 @@ import { onMounted, reactive, ref } from 'vue';
 import TheEditor from '@/components/ui/TheEditor.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
 import TheUpload from '@/components/ui/TheUpload.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 
 const route = useRoute();
+const router = useRouter();
 const entryStore = useEntryStore();
 const content = ref<any>();
 const preview = ref();
@@ -25,6 +27,11 @@ const slug = ref<string>(route.params.slug as string);
 
 const handleUpdateData = async () => {
   await entryStore.updateEntry(slug.value, entry);
+  ElMessage({
+    message: 'Новость обновлена',
+    type: 'success',
+  });
+  await router.push({ name: 'entries' });
 };
 
 onMounted(async () => {
@@ -38,7 +45,7 @@ onMounted(async () => {
   const { rubrics } = content.value || {};
   preview.value = content.value.preview.path || undefined;
   entry.rubrics = rubrics.map((item: { rubricId: string }) => item.rubricId);
-  console.log(entry);
+
 });
 
 </script>
@@ -46,7 +53,7 @@ onMounted(async () => {
 <template>
   <div class='entry' v-if='entry'>
     <div class='image'>
-      <the-upload :current-image='preview' v-model='entry.fileId'/>
+      <the-upload :current-image='preview' v-model='entry.fileId' />
     </div>
     <div class='fields'>
       <div class='title'>
@@ -72,12 +79,15 @@ onMounted(async () => {
       <TheEditor v-model='entry.content' />
     </div>
     <div class='department'>
+      <div>Отдел</div>
       <the-select v-model='entry.departmentId' entryOrder='department' />
     </div>
     <div class='rubric'>
+      <div>Рубрики</div>
       <the-select v-model='entry.rubrics' entryOrder='rubric' />
     </div>
     <div class='date'>
+      <div>Дата</div>
       <el-date-picker
         v-model='entry.publishedAt'
       />

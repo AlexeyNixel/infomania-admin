@@ -1,13 +1,15 @@
 <script setup lang='ts'>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useSliderStore } from '@/stores/slider';
 import { onMounted, reactive, ref } from 'vue';
 import TheUploadSlide from '@/components/ui/TheUploadSlide.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
 import type { SliderType } from '@/types/models';
+import { ElMessage } from 'element-plus';
 
 const preview = ref<string>();
 const route = useRoute();
+const router = useRouter();
 const sliderStore = useSliderStore();
 const content = ref()
 const slide = reactive<any>({
@@ -21,6 +23,11 @@ const slide = reactive<any>({
 
 const handleUpdateSlide = async () => {
   await sliderStore.updateSlide(route.params.slug as string, slide);
+  ElMessage({
+    message: 'Слайд обновлен',
+    type: 'success',
+  });
+  await router.push({name:'slides'})
 };
 
 onMounted(async () => {

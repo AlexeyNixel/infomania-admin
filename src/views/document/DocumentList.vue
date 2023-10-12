@@ -45,23 +45,15 @@ const fetchData = async (val?: number) => {
       <div class='list__field-long'>Название</div>
       <div class='list__field'>Дата</div>
       <div class='list__field'>Статус</div>
-      <div class='list__field'>Обновить</div>
     </div>
     <el-scrollbar>
       <div class='list-item' v-for='item in documents' :key='item.id'>
-        <div class='list-item__field-long'>{{ item.title }}</div>
+        <router-link :to='{name:"documentUpdate", params:{slug:item.id}}' class='list-item__field-long'>{{ item.title }}</router-link>
         <div class='list-item__field'>
           {{ dayjs(item.publishedAt).format('DD.MM.YYYY') }}
         </div>
         <div class='list-item__field'>
           <el-checkbox v-model='item.isDeleted' label='Удален' size='large' />
-        </div>
-        <div class='list-item__field'>
-          <el-button
-            @click='router.push({name:"documentUpdate", params:{slug:item.id}})'
-          >
-            Обновить
-          </el-button>
         </div>
       </div>
     </el-scrollbar>
@@ -93,7 +85,7 @@ const fetchData = async (val?: number) => {
     text-align: center;
 
     &-long {
-      width: 50%;
+      width: 78%;
       text-align: center;
       border-right: 1px solid white;
 
@@ -111,7 +103,7 @@ const fetchData = async (val?: number) => {
     text-align: center;
 
     &-long {
-      width: 50%;
+      width: 78%;
 
       &:hover {
         cursor: pointer;
