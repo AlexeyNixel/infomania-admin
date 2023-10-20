@@ -1,16 +1,15 @@
 <script setup lang='ts'>
 import { useEntryStore } from '@/stores/entry';
 import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 import TheEditor from '@/components/ui/TheEditor.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
 import TheUpload from '@/components/ui/TheUpload.vue';
-import { useRoute, useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
+import TheUploadDocument from '@/components/ui/TheUploadDocument.vue';
 
-const route = useRoute();
 const router = useRouter();
 const entryStore = useEntryStore();
-const content = ref<any>();
 const preview = ref();
 const entry = reactive<any>({
   title: '',
@@ -30,7 +29,7 @@ const handleCreateData = async () => {
     message: 'Новость создана',
     type: 'success',
   });
-  await router.push({name:'entries'})
+  await router.push({ name: 'entries' });
 };
 
 </script>
@@ -38,7 +37,7 @@ const handleCreateData = async () => {
 <template>
   <div class='entry' v-if='entry'>
     <div class='image'>
-      <the-upload :current-image='preview' v-model='entry.fileId'/>
+      <the-upload :current-image='preview' v-model='entry.fileId' />
     </div>
     <div class='fields'>
       <div class='title'>
@@ -74,15 +73,11 @@ const handleCreateData = async () => {
     <div class='date'>
       <div>Дата</div>
       <el-date-picker
-
         v-model='entry.publishedAt'
       />
     </div>
-    <div class='delete'>
-      <el-button>Удалить</el-button>
-    </div>
     <div class='document'>
-      <el-button>Документ</el-button>
+      <the-upload-document />
     </div>
     <div class='button'>
       <el-button @click='handleCreateData'>Создать</el-button>
@@ -114,7 +109,7 @@ const handleCreateData = async () => {
   grid-template-areas:
     "image fields fields fields fields"
     "editor editor editor editor editor"
-    "department rubric date delete document"
+    "department rubric date document document"
     "button . . . .";
 }
 

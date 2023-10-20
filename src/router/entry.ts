@@ -10,7 +10,7 @@ export const entryRoute = [
     component: () => import('../views/entry/EntryCreate.vue'),
   },
   {
-    path: '/entry/',
+    path: '/entries/',
     name: 'entries',
     component: () => import('../views/entry/EntryList.vue'),
   },

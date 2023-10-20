@@ -30,3 +30,7 @@ export const putDocument = async (id: string, data: object): Promise<any> => {
 export const postDocument = async (data: any) => {
   return await axiosApi.post(DOCUMENT_ROUTE, data);
 };
+
+export const postMenuItem = async (data: any) => {
+  return await axiosApi.post(MENU_ITEM_ROUTE, data);
+};

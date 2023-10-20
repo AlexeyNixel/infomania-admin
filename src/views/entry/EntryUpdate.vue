@@ -6,6 +6,7 @@ import TheSelect from '@/components/ui/TheSelect.vue';
 import TheUpload from '@/components/ui/TheUpload.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
+import TheUploadDocument from '@/components/ui/TheUploadDocument.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -92,11 +93,8 @@ onMounted(async () => {
         v-model='entry.publishedAt'
       />
     </div>
-    <div class='delete'>
-      <el-button>Удалить</el-button>
-    </div>
     <div class='document'>
-      <el-button>Документ</el-button>
+      <the-upload-document/>
     </div>
     <div class='button'>
       <el-button @click='handleUpdateData'>Обновить</el-button>
@@ -128,7 +126,7 @@ onMounted(async () => {
   grid-template-areas:
     "image fields fields fields fields"
     "editor editor editor editor editor"
-    "department rubric date delete document"
+    "department rubric date document document"
     "button . . . .";
 }
 

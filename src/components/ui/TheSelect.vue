@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { useAdminStore } from '@/stores/admin';
 
-type PropsType = { entryOrder?: 'department' | 'rubric' | 'menu-item' | 'entry' }
+type PropsType = { entryOrder?: 'department' | 'rubric' | 'menu-item' | 'entry' | 'menu'}
 
 const props = defineProps<PropsType>();
 const adminStore = useAdminStore();
@@ -15,7 +15,13 @@ onMounted(async () => {
       isDeleted: true,
     });
     content.value = data;
-  } else if (props?.entryOrder === 'menu-item') {
+  } else if (props?.entryOrder === 'menu') {
+    const { data } = await adminStore.getAllModel(`api/${props.entryOrder}/`, {
+      pageSize: 100,
+    });
+    content.value = data;
+  }
+  else if (props?.entryOrder === 'menu-item') {
     const { data } = await adminStore.getAllModel(`api/${props.entryOrder}/`, {
       pageSize: 100,
     });

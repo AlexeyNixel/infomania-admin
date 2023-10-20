@@ -25,6 +25,11 @@ const buttons = [
     list: 'slides',
     create: 'slidesCreate',
   },
+  {
+    title: 'Меню',
+    list: 'menu',
+    create: 'menuCreate',
+  },
 ];
 
 const entryStore = useEntryStore();
@@ -32,6 +37,8 @@ const adminStore = useAdminStore();
 const { username } = storeToRefs(adminStore);
 
 onBeforeMount(async () => {
+  adminStore.token = localStorage.getItem('token' ) || ''
+  adminStore.username = localStorage.getItem('username' ) || ''
   await entryStore.createEntry({});
 });
 </script>
@@ -49,6 +56,7 @@ onBeforeMount(async () => {
           <router-link :to='{name: item.create}' class='aside__path'>Создать</router-link>
         </div>
       </div>
+
     </div>
     <div class='main'>
       <RouterView />
@@ -69,6 +77,8 @@ onBeforeMount(async () => {
   width: 15%;
   background-color: var(--el-bg-color-overlay);
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
 
   &__title {
     display: flex;
@@ -77,8 +87,8 @@ onBeforeMount(async () => {
     text-align: center;
     font-weight: bold;
     font-size: 2vw;
-    height: 4%;
     color: white;
+    margin: 10px 0;
   }
 
   &__username {
@@ -102,6 +112,9 @@ onBeforeMount(async () => {
 
   &__path {
     font-size: 1.1rem;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
