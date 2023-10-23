@@ -1,11 +1,18 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import TheSelect from '@/components/ui/TheSelect.vue';
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useMenuStore } from '@/stores/menu';
+import type { MenuItemType } from '@/types/models';
 
-const menuStore = useMenuStore()
+const route = useRoute();
+const router = useRouter();
+const menuStore = useMenuStore();
 
-const menuItem = reactive({
+const content = ref<any>();
+const slug = ref<string>(route.params.slug as string);
+
+const menuItem = reactive<any>({
   title: '',
   slug: '',
   menuId: '',
@@ -14,46 +21,64 @@ const menuItem = reactive({
   isDeleted: false,
 });
 
-const handleCreateMenu = async () => {
-  return await menuStore.createMenuItem(menuItem)
-}
+const handleUpdateMenu = async () => {
+  return await menuStore.updateMenuItem(slug.value, menuItem);
+};
+
+onMounted(async () => {
+  content.value = await menuStore.getMenuItem(slug.value);
+  Object.keys(menuItem).forEach((key) => {
+    menuItem[key] = content.value[key];
+  });
+});
 </script>
 
 <template>
-  <div class='create-menu'>
-    <div class='create-menu__item'>
+  <div class="create-menu">
+    <div class="create-menu__item">
       <div>Название</div>
-      <el-input class='create-menu__field-long' v-model='menuItem.title'></el-input>
+      <el-input
+        class="create-menu__field-long"
+        v-model="menuItem.title"></el-input>
     </div>
-    <div class='create-menu__item'>
+    <div class="create-menu__item">
       <div>Слаг</div>
-      <el-input class='create-menu__field-long' v-model='menuItem.slug'></el-input>
+      <el-input
+        class="create-menu__field-long"
+        v-model="menuItem.slug"></el-input>
     </div>
-    <div class='create-menu__group'>
-      <div class='create-menu__item'>
+    <div class="create-menu__group">
+      <div class="create-menu__item">
         <div>Тип контента</div>
-        <el-select class='create-menu__field' v-model='menuItem.menuItemType'>
-          <el-option value='DOCUMENT' label='Документ' />
-          <el-option value='LINK' label='Ссылка' />
+        <el-select class="create-menu__field" v-model="menuItem.menuItemType">
+          <el-option value="DOCUMENT" label="Документ" />
+          <el-option value="LINK" label="Ссылка" />
         </el-select>
       </div>
-      <div class='create-menu__item'>
+      <div class="create-menu__item">
         <div>Меню</div>
-        <the-select class='create-menu__field' entry-order='menu' v-model='menuItem.menuId' />
+        <the-select
+          class="create-menu__field"
+          entry-order="menu"
+          v-model="menuItem.menuId" />
       </div>
     </div>
-    <div class='create-menu__item' v-if='menuItem.menuItemType === "LINK"'>
+    <div class="create-menu__item" v-if="menuItem.menuItemType === 'LINK'">
       <div>Ссылка</div>
-      <el-input class='create-menu__field-long' v-model='menuItem.link'></el-input>
+      <el-input
+        class="create-menu__field-long"
+        v-model="menuItem.link"></el-input>
     </div>
-    <div class='create-menu__group-short'>
-      <el-checkbox v-model='menuItem.isDeleted' label='Удалить' size='large' />
-      <el-button class='create-menu__btn' @click='handleCreateMenu'>Создать</el-button>
+    <div class="create-menu__group-short">
+      <el-checkbox v-model="menuItem.isDeleted" label="Удалить" size="large" />
+      <el-button class="create-menu__btn" @click="handleUpdateMenu"
+        >Создать</el-button
+      >
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .create-menu {
   height: 100%;
   display: flex;

@@ -56,7 +56,6 @@ onBeforeMount(async () => {
           <router-link :to='{name: item.create}' class='aside__path'>Создать</router-link>
         </div>
       </div>
-
     </div>
     <div class='main'>
       <RouterView />

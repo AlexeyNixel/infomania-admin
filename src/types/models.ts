@@ -124,6 +124,7 @@ export type MenuItemType = {
   menuItemType: string;
   slug: string;
   link: string;
+  isDeleted: boolean;
   document: DocumentType;
 };
 
@@ -179,7 +180,8 @@ export const AffichePlaces: { [key in AffichePlacesEnum]: string } = {
   [AffichePlacesEnum.SPACE_TYPE_OUT]: 'Выездное',
   [AffichePlacesEnum.SPACE_TYPE_GUEST]: 'Гостиная',
   [AffichePlacesEnum.SPACE_TYPE_ITCLASS]: 'IT-класс (весь)',
-  [AffichePlacesEnum.SPACE_TYPE_ITCLASS_1]: 'Компьютерный класс (секция с компьютерами)',
+  [AffichePlacesEnum.SPACE_TYPE_ITCLASS_1]:
+    'Компьютерный класс (секция с компьютерами)',
   [AffichePlacesEnum.SPACE_TYPE_ITCLASS_2]: 'Компьютерный класс (студия)',
   [AffichePlacesEnum.SPACE_TYPE_CONF]: 'Конференц-зал',
   [AffichePlacesEnum.SPACE_TYPE_MEDIA]: 'Медиатека',
@@ -187,11 +189,15 @@ export const AffichePlaces: { [key in AffichePlacesEnum]: string } = {
   [AffichePlacesEnum.SPACE_TYPE_OKIR]: 'Отдел координации и развития',
   [AffichePlacesEnum.SPACE_TYPE_OMP]: 'Отдел литературных программ',
   [AffichePlacesEnum.SPACE_TYPE_OOL]: 'Отдел отраслевой литературы (зал)',
-  [AffichePlacesEnum.SPACE_TYPE_KOHL_DS]: 'Отдел художественной литературы (детский сектор)',
-  [AffichePlacesEnum.SPACE_TYPE_KOHL_C]: 'Отдел художественной литературы (цокольный этаж)',
-  [AffichePlacesEnum.SPACE_TYPE_CROSS]: 'Пересечение Красного проспекта и Октябрьской',
+  [AffichePlacesEnum.SPACE_TYPE_KOHL_DS]:
+    'Отдел художественной литературы (детский сектор)',
+  [AffichePlacesEnum.SPACE_TYPE_KOHL_C]:
+    'Отдел художественной литературы (цокольный этаж)',
+  [AffichePlacesEnum.SPACE_TYPE_CROSS]:
+    'Пересечение Красного проспекта и Октябрьской',
   [AffichePlacesEnum.SPACE_TYPE_OOL_COM]: 'Центр графической культуры',
-  [AffichePlacesEnum.SPACE_TYPE_CPKIM]: 'Центр поддержки культурных инициатив молодёжи',
+  [AffichePlacesEnum.SPACE_TYPE_CPKIM]:
+    'Центр поддержки культурных инициатив молодёжи',
   [AffichePlacesEnum.SPACE_TYPE_VIRT]: 'Электронные ресурсы библиотеки',
 };
 

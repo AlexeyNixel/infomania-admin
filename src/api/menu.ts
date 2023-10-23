@@ -10,11 +10,17 @@ export const findMenus = async (params?: ParamsType): Promise<any> => {
   return await axiosApi.get(MENU_ITEM_ROUTE, { params });
 };
 
-export const findMenu = async (slug: string, params?: ParamsType): Promise<any> => {
+export const findMenu = async (
+  slug: string,
+  params?: ParamsType,
+): Promise<any> => {
   return await axiosApi.get(`${MENU_ITEM_ROUTE}${slug}`, { params });
 };
 
-export const findDocument = async (id: string, params?: ParamsType): Promise<any> => {
+export const findDocument = async (
+  id: string,
+  params?: ParamsType,
+): Promise<any> => {
   return await axiosApi.get(`${DOCUMENT_ROUTE}${id}`, { params });
 };
 
@@ -33,4 +39,8 @@ export const postDocument = async (data: any) => {
 
 export const postMenuItem = async (data: any) => {
   return await axiosApi.post(MENU_ITEM_ROUTE, data);
+};
+
+export const putMenuItem = async (id: string, data: any) => {
+  return await axiosApi.put(`${MENU_ITEM_ROUTE}${id}`, data);
 };
