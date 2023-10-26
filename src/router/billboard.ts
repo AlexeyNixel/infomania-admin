@@ -7,11 +7,11 @@ export const billboardRoute = [
   {
     path: '/billboard/update/:slug',
     name: 'billboardUpdate',
-    component: () => import('../views/department/DepartmentUpdate.vue')
+    component: () => import('../views/billboard/BillboardUpdate.vue')
   },
   {
     path: '/billboard/create/',
     name: 'billboardCreate',
-    component: () => import('../views/department/DepartmentCreate.vue')
+    component: () => import('../views/billboard/BillboardCreate.vue')
   },
 ]

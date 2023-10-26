@@ -1,8 +1,29 @@
 <script setup lang="ts">
 import { useBillboardStore } from '@/stores/billboard';
+import dayjs from 'dayjs';
+import { onMounted, ref } from 'vue';
+import { ElMessage } from 'element-plus';
 
-const billboardStore = useBillboardStore()
-const billboard = ref()
+const billboardStore = useBillboardStore();
+const billboards = ref();
+
+const handleDeleteBillboard = async (slug: string, status: boolean) => {
+  await billboardStore.updateBillboard(slug, {isDeleted: status})
+  return  ElMessage({
+    message: 'Афиша Удалена',
+    type: 'success',
+  });
+}
+
+onMounted(async () => {
+  const { data, meta } =
+    await billboardStore.getBillboards({
+      pageSize: 30,
+      orderBy: "-eventDate",
+    });
+  billboards.value = data;
+  console.log(billboards.value);
+});
 </script>
 
 <template>
@@ -14,16 +35,20 @@ const billboard = ref()
     </div>
     <el-scrollbar>
       <div class="list-item" v-for="item in billboards" :key="item.id">
-        <router-link
-          :to="{ name: 'departmentUpdate', params: { slug: item.id } }"
-          class="list-item__field-long"
-          v-html="item.title">
+        <router-link :to="{
+          name: 'billboardUpdate',
+          params: { slug: item.id },
+        }" class="list-item__field-long" v-html="item.title">
         </router-link>
         <div class="list-item__field">
-          {{ dayjs(item.eventDate).format('DD.MM.YYYY') }}
+          {{
+            dayjs(item.eventDate).format(
+              'DD.MM.YYYY'
+            )
+          }}
         </div>
         <div class="list-item__field">
-          <el-checkbox v-model="item.isDeleted" label="Удален" size="large" />
+          <el-checkbox @change='handleDeleteBillboard(item.id, item.isDeleted)' v-model="item.isDeleted" label="Удален" size="large" />
         </div>
       </div>
     </el-scrollbar>

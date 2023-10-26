@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang='ts'>
 import { useEntryStore } from '@/stores/entry';
 import { onBeforeMount } from 'vue';
 import { useAdminStore } from '@/stores/admin';
@@ -30,11 +30,11 @@ const buttons = [
     list: 'menu',
     create: 'menuCreate',
   },
-  // {
-  //   title: 'Афиша',
-  //   list: 'billboard',
-  //   create: 'billboardCreate',
-  // },
+  {
+    title: 'Афиша',
+    list: 'billboard',
+    create: 'billboardCreate',
+  },
 ];
 
 const entryStore = useEntryStore();
@@ -49,30 +49,32 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class="admin">
-    <div class="aside">
-      <a href="http://dev.infomania.ru" class="aside__title">INFOMANIA</a>
-      <div class="aside__username">{{ username }}</div>
-      <div class="aside__item" v-for="(item, index) in buttons" :key="index">
-        <div class="aside__menu">{{ item.title }}</div>
-        <div class="aside__link">
-          <router-link :to="{ name: item.list }" class="aside__path"
-            >Список</router-link
+  <div class='admin'>
+    <div class='aside'>
+      <a href='http://dev.infomania.ru' class='aside__title'>INFOMANIA</a>
+      <div class='aside__username'>{{ username }}</div>
+      <div class='aside__item' v-for='(item, index) in buttons' :key='index'>
+        <div class='aside__menu'>{{ item.title }}</div>
+        <div class='aside__link'>
+          <router-link :to='{ name: item.list }' class='aside__path'
           >
-          <div class="aside__path">/</div>
-          <router-link :to="{ name: item.create }" class="aside__path"
-            >Создать</router-link
+            Список
+          </router-link>
+          <div class='aside__path'>/</div>
+          <router-link :to='{ name: item.create }' class='aside__path'
           >
+            Создать
+          </router-link>
         </div>
       </div>
     </div>
-    <div class="main">
+    <div class='main'>
       <RouterView />
     </div>
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped lang='scss'>
 .admin {
   display: flex;
   width: calc(100vw - 10px);
@@ -120,6 +122,7 @@ onBeforeMount(async () => {
 
   &__path {
     font-size: 1.1rem;
+
     &:hover {
       text-decoration: underline;
     }
