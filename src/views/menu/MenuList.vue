@@ -9,7 +9,6 @@ import { ElMessage } from 'element-plus';
 const route = useRoute();
 const router = useRouter();
 const menuStore = useMenuStore();
-const entries = ref<EntryType[]>();
 const menuItem = ref<MenuItemType[]>();
 
 const totalPage = ref<number>(1);

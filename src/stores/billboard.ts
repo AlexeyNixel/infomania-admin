@@ -5,7 +5,8 @@ import { defineStore } from 'pinia';
 export const useBillboardStore = defineStore('billboard', () => {
 
   const getBillboard = async (params?: ParamsType) => {
-    return await findAffiches(params)
+    const { data } = await findAffiches(params)
+    return data
   }
 
   return {

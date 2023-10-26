@@ -1,8 +1,8 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useDepartmentStore } from '@/stores/department';
 import { reactive, ref } from 'vue';
 import TheUpload from '@/components/ui/TheUpload.vue';
-import { Delete } from '@element-plus/icons-vue'
+import { Delete } from '@element-plus/icons-vue';
 
 const departmentStore = useDepartmentStore();
 
@@ -11,7 +11,7 @@ const department = reactive({
   title: '',
   slug: '',
   isDeleted: false,
-  fileId: ''
+  fileId: '',
 });
 
 const handleUpdate = async () => {
@@ -20,36 +20,35 @@ const handleUpdate = async () => {
 </script>
 
 <template>
-  <div class='container'>
-    <div class='department-update'>
-      <div class='department-update__preview'>
-        <the-upload v-model='department.fileId' :current-image='preview' />
+  <div class="container">
+    <div class="department-update">
+      <div class="department-update__preview">
+        <the-upload v-model="department.fileId" :current-image="preview" />
       </div>
-      <div class='department-update__text'>
-        <div class='department-update__item'>
+      <div class="department-update__text">
+        <div class="department-update__item">
           <span>Название</span>
-          <el-input v-model='department.title' />
+          <el-input v-model="department.title" />
         </div>
-        <div class='department-update__item'>
+        <div class="department-update__item">
           <span>Слаг</span>
-          <el-input v-model='department.slug' />
+          <el-input v-model="department.slug" />
         </div>
-        <div class='department-update__item'>
+        <div class="department-update__item">
           <el-switch
-            v-model='department.isDeleted'
+            v-model="department.isDeleted"
             :active-action-icon="Delete"
-            size="large"
-          />
+            size="large" />
         </div>
-        <div class='department-update__btn'>
-          <el-button @click='handleUpdate'>Создать</el-button>
+        <div class="department-update__btn">
+          <el-button @click="handleUpdate">Создать</el-button>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .container {
   display: flex;
   align-items: center;

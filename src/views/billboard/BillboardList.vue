@@ -1,45 +1,33 @@
 <script setup lang="ts">
-import dayjs from 'dayjs';
-import { useRoute, useRouter } from 'vue-router';
-import { onMounted, ref } from 'vue';
-import type { DepartmentType } from '@/types/models';
 import { useBillboardStore } from '@/stores/billboard';
 
-const billboardStore = useBillboardStore();
-const department = ref<DepartmentType[]>();
-
-const route = useRoute();
-const router = useRouter();
-
-onMounted(async () => {
-  const data = await billboardStore.getBillboard();
-  console.log(data);
-});
+const billboardStore = useBillboardStore()
+const billboard = ref()
 </script>
 
 <template>
-  <!-- <div class="list">
+  <div class="list">
     <div class="list__header">
       <div class="list__field-long">Название</div>
       <div class="list__field">Дата</div>
       <div class="list__field">Статус</div>
     </div>
     <el-scrollbar>
-      <div class="list-item" v-for="item in department" :key="item.id">
+      <div class="list-item" v-for="item in billboards" :key="item.id">
         <router-link
           :to="{ name: 'departmentUpdate', params: { slug: item.id } }"
-          class="list-item__field-long">
-          {{ item.title }}
+          class="list-item__field-long"
+          v-html="item.title">
         </router-link>
         <div class="list-item__field">
-          {{ dayjs(item.publishedAt).format('DD.MM.YYYY') }}
+          {{ dayjs(item.eventDate).format('DD.MM.YYYY') }}
         </div>
         <div class="list-item__field">
           <el-checkbox v-model="item.isDeleted" label="Удален" size="large" />
         </div>
       </div>
     </el-scrollbar>
-  </div> -->
+  </div>
 </template>
 
 <style scoped lang="scss">

@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useEntryStore } from '@/stores/entry';
 import { onBeforeMount } from 'vue';
 import { useAdminStore } from '@/stores/admin';
@@ -30,6 +30,11 @@ const buttons = [
     list: 'menu',
     create: 'menuCreate',
   },
+  // {
+  //   title: 'Афиша',
+  //   list: 'billboard',
+  //   create: 'billboardCreate',
+  // },
 ];
 
 const entryStore = useEntryStore();
@@ -37,33 +42,37 @@ const adminStore = useAdminStore();
 const { username } = storeToRefs(adminStore);
 
 onBeforeMount(async () => {
-  adminStore.token = localStorage.getItem('token' ) || ''
-  adminStore.username = localStorage.getItem('username' ) || ''
+  adminStore.token = localStorage.getItem('token') || '';
+  adminStore.username = localStorage.getItem('username') || '';
   await entryStore.createEntry({});
 });
 </script>
 
 <template>
-  <div class='admin'>
-    <div class='aside'>
-      <a href='http://dev.infomania.ru' class='aside__title'>INFOMANIA</a>
-      <div class='aside__username'>{{ username }}</div>
-      <div class='aside__item' v-for='(item, index) in buttons' :key='index'>
-        <div class='aside__menu'>{{ item.title }}</div>
-        <div class='aside__link'>
-          <router-link :to='{name: item.list}' class='aside__path'>Список</router-link>
-          <div class='aside__path'>/</div>
-          <router-link :to='{name: item.create}' class='aside__path'>Создать</router-link>
+  <div class="admin">
+    <div class="aside">
+      <a href="http://dev.infomania.ru" class="aside__title">INFOMANIA</a>
+      <div class="aside__username">{{ username }}</div>
+      <div class="aside__item" v-for="(item, index) in buttons" :key="index">
+        <div class="aside__menu">{{ item.title }}</div>
+        <div class="aside__link">
+          <router-link :to="{ name: item.list }" class="aside__path"
+            >Список</router-link
+          >
+          <div class="aside__path">/</div>
+          <router-link :to="{ name: item.create }" class="aside__path"
+            >Создать</router-link
+          >
         </div>
       </div>
     </div>
-    <div class='main'>
+    <div class="main">
       <RouterView />
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .admin {
   display: flex;
   width: calc(100vw - 10px);
@@ -106,7 +115,7 @@ onBeforeMount(async () => {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
-    margin-left: .6vw;
+    margin-left: 0.6vw;
   }
 
   &__path {

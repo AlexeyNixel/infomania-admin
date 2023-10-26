@@ -125,6 +125,7 @@ export type MenuItemType = {
   slug: string;
   link: string;
   isDeleted: boolean;
+  publishedAt: string;
   document: DocumentType;
 };
 

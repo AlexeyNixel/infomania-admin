@@ -1,5 +1,8 @@
+import { axiosApi } from './../api/axios';
+import slugify from 'slugify';
+
 class UploadAdapter {
-  private readonly loader: any;
+  private loader: any;
 
   constructor(loader: any) {
     // The file loader instance to use during the upload.
@@ -9,9 +12,23 @@ class UploadAdapter {
   // Starts the upload process.
   async upload() {
     const data = new FormData();
+
+    const name = (await this.loader.file).name
+
     data.append('file', await this.loader.file);
+    data.append('filename', slugify(name, {
+      replacement: '-',
+      remove: /\.,?!\+=\*:;/g,
+      lower: true,
+      strict: false,
+      locale: 'ru',
+      trim: true,
+    }));
+
+
     return new Promise((resolve, reject) => {
-      fetch(`http://api.infomania.ru/api/upload`, {
+
+      fetch(`http://localhost:3000/api/upload`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -20,7 +37,6 @@ class UploadAdapter {
       })
         .then(async (response) => {
           const result = await response.json();
-
           resolve({ default: `http://static.infomania.ru${result.path}` });
         })
         .catch((err) => {

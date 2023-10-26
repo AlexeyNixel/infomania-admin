@@ -4,6 +4,8 @@ import { departmentRoute } from '@/router/department';
 import { sliderRoute } from '@/router/slider';
 import { documentRoute } from '@/router/document';
 import { menuRoute } from '@/router/menu';
+import { billboardRoute } from '@/router/billboard';
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +25,7 @@ const router = createRouter({
     ...sliderRoute,
     ...documentRoute,
     ...menuRoute,
+    ...billboardRoute,
   ],
 });
 

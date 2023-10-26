@@ -1,8 +1,10 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useAdminStore } from '@/stores/admin';
 
-type PropsType = { entryOrder?: 'department' | 'rubric' | 'menu-item' | 'entry' | 'menu'}
+type PropsType = {
+  entryOrder?: 'department' | 'rubric' | 'menu-item' | 'entry' | 'menu';
+};
 
 const props = defineProps<PropsType>();
 const adminStore = useAdminStore();
@@ -20,8 +22,7 @@ onMounted(async () => {
       pageSize: 100,
     });
     content.value = data;
-  }
-  else if (props?.entryOrder === 'menu-item') {
+  } else if (props?.entryOrder === 'menu-item') {
     const { data } = await adminStore.getAllModel(`api/${props.entryOrder}/`, {
       pageSize: 100,
     });
@@ -33,31 +34,29 @@ onMounted(async () => {
     });
     content.value = data;
   } else {
-    const { data } = await adminStore.getAllModel(`api/${props.entryOrder}/`, {isDeleted: true});
+    const { data } = await adminStore.getAllModel(`api/${props.entryOrder}/`, {
+      isDeleted: true,
+    });
     content.value = data;
   }
 });
 </script>
 
 <template>
-  <el-select v-if='props?.entryOrder === "rubric"' multiple>
+  <el-select v-if="props?.entryOrder === 'rubric'" multiple>
     <el-option
-      v-for='item in content'
-      :key='item.id'
-      :label='item.title'
-      :value='item.id'
-    />
+      v-for="item in content"
+      :key="item.id"
+      :label="item.title"
+      :value="item.id" />
   </el-select>
   <el-select v-else>
     <el-option
-      v-for='item in content'
-      :key='item.id'
-      :label='item.title'
-      :value='item.id'
-    />
+      v-for="item in content"
+      :key="item.id"
+      :label="item.title"
+      :value="item.id" />
   </el-select>
 </template>
 
-<style scoped lang='scss'>
-
-</style>
+<style scoped lang="scss"></style>
