@@ -1,17 +1,17 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useBillboardStore } from '@/stores/billboard';
-import type { BillboardType } from '@/types/models';
 import { onMounted, reactive, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import TheEditor from '@/components/ui/TheEditor.vue';
 import { AffichePlaces } from '@/types/models';
+import { ElMessage } from 'element-plus';
 
+const router = useRouter();
 const route = useRoute();
-
 const billboardStore = useBillboardStore();
+
 const slug = ref<string>(route.params.slug as string);
 const places = AffichePlaces;
-
 const billboard = reactive<any>({
   title: '',
   phone: '',
@@ -24,13 +24,17 @@ const billboard = reactive<any>({
 });
 
 const handleUpdateDate = async () => {
+  ElMessage({
+    message: 'Афиша обновлена',
+    type: 'success',
+  });
+  await router.push({ name: 'billboard' });
   return await billboardStore.updateBillboard(slug.value, billboard);
 };
 
 onMounted(async () => {
+  //@ts-ignore
   const { data } = await billboardStore.getBillboard(slug.value);
-  console.log(data);
-
   Object.keys(billboard).forEach((key) => {
     billboard[key] = data[key];
   });
@@ -38,69 +42,100 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class='billboard'>
-    <div class='billboard__string'>
-      <div class='billboard__item'>
-        <div>Название</div>
-        <el-input v-model='billboard.title' />
-      </div>
-      <div class='billboard__item'>
-        <div>Телефон</div>
-        <el-input v-model='billboard.phone' />
-      </div>
-      <div class='billboard__item'>
-        <div>Слаг</div>
-        <el-input v-model='billboard.slug' />
-      </div>
+  <div class="container">
+    <div class="title">
+      <div>Название</div>
+      <el-input v-model="billboard.title" />
     </div>
-    <div class='billboard__editor'>
-      <TheEditor v-model='billboard.desc' />
+    <div class="phone">
+      <div>Телефон</div>
+      <el-input v-model="billboard.phone" />
     </div>
-    <div class='billboard__select'>
+    <div class="slug">
+      <div>Слаг</div>
+      <el-input v-model="billboard.slug" />
+    </div>
+    <div class="editor">
+      <div>Контент</div>
+      <TheEditor v-model="billboard.desc" />
+    </div>
+    <div class="timepicker">
+      <div>Время</div>
       <el-time-picker
-        format='HH:mm:ss'
-        value-format='YYYY-MM-DDTHH:mm:ss.000+00:00'
-        v-model='billboard.eventTime'
-        placeholder='Время'
+        format="HH:mm:ss"
+        value-format="YYYY-MM-DDTHH:mm:ss.000+00:00"
+        v-model="billboard.eventTime"
+        placeholder="Время"
       />
+    </div>
+    <div class="datepicker">
+      <div>Дата</div>
       <el-date-picker
-        v-model='billboard.eventDate'
-        type='datetime'
-        placeholder='Дата'
+        value-format="YYYY-MM-DDTHH:mm:ss.000+00:00"
+        v-model="billboard.eventDate"
+        type="datetime"
+        placeholder="Дата"
       />
-      <el-select v-model='billboard.eventPlace' placeholder='Select'>
+    </div>
+    <div class="place">
+      <el-select v-model="billboard.eventPlace" placeholder="Select">
         <el-option
-          v-for='(item, index) in places'
-          :key='index'
-          :label='item'
-          :value='index'
+          v-for="(item, index) in places"
+          :key="index"
+          :label="item"
+          :value="index"
         />
       </el-select>
     </div>
-    <el-button @click='handleUpdateDate'>Обновить</el-button>
+    <el-button @click="handleUpdateDate" style="width: max-content">
+      Обновить
+    </el-button>
   </div>
 </template>
 
-<style scoped lang='scss'>
-.billboard {
+<style scoped lang="scss">
+.container {
   margin: 0;
   background-color: var(--el-bg-color-overlay);
   border-radius: 10px;
   height: calc(100% - 20px);
   padding: 10px 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 5px 5px;
+  grid-auto-flow: row dense;
+  grid-template-areas:
+    'title phone slug'
+    'editor editor editor'
+    'timepicker datepicker place';
+}
 
-  &__string {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+.title {
+  grid-area: title;
+}
 
-    .el-input {
-      width: 20vw;
-    }
-  }
+.phone {
+  grid-area: phone;
+}
 
-  &__editor {
-    margin: 1vh 0;
-  }
+.slug {
+  grid-area: slug;
+}
+
+.editor {
+  grid-area: editor;
+}
+
+.timepicker {
+  grid-area: timepicker;
+}
+
+.datepicker {
+  grid-area: datepicker;
+}
+
+.place {
+  grid-area: place;
 }
 </style>

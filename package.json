@@ -13,10 +13,12 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^34.2.0",
     "@ckeditor/ckeditor5-vue": "^4.0.1",
+    "@vueuse/core": "^10.5.0",
     "axios": "^1.5.0",
     "dayjs": "^1.11.9",
     "element-plus": "^2.3.12",
     "pinia": "^2.1.6",
+    "prettier": "^3.0.3",
     "slugify": "^1.6.6",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"

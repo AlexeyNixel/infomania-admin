@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useBillboardStore } from '@/stores/billboard';
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
@@ -21,98 +21,111 @@ const billboard = reactive<any>({
   isDeleted: false,
 });
 
-const handleUpdateDate = async () => {
+const handleCreateDate = async () => {
   ElMessage({
     message: 'Афиша создана',
     type: 'success',
   });
-  await router.push({name: "billboard"})
+  await router.push({ name: 'billboard' });
   return await billboardStore.createBillboard(billboard);
 };
 </script>
 
 <template>
-  <div class='billboard'>
-    <div class='billboard__string'>
-      <div class='billboard__item'>
-        <div>Название</div>
-        <el-input v-model='billboard.title' />
-      </div>
-      <div class='billboard__item'>
-        <div>Телефон</div>
-        <el-input v-model='billboard.phone' />
-      </div>
-      <div class='billboard__item'>
-        <div>Слаг</div>
-        <el-input v-model='billboard.slug' />
-      </div>
+  <div class="container">
+    <div class="title">
+      <div>Название</div>
+      <el-input v-model="billboard.title" />
     </div>
-    <div class='billboard__editor'>
-      <TheEditor v-model='billboard.desc' />
+    <div class="phone">
+      <div>Телефон</div>
+      <el-input v-model="billboard.phone" />
     </div>
-    <div class='billboard__select'>
-      <div class='billboard__select-item'>
-        <div>Время</div>
-        <el-time-picker
-          format='HH:mm:ss'
-          value-format='YYYY-MM-DDTHH:mm:ss.000+00:00'
-          v-model='billboard.eventTime'
-          placeholder='Время'
+    <div class="slug">
+      <div>Слаг</div>
+      <el-input v-model="billboard.slug" />
+    </div>
+    <div class="editor">
+      <div>Контент</div>
+      <TheEditor v-model="billboard.desc" />
+    </div>
+    <div class="timepicker">
+      <div>Время</div>
+      <el-time-picker
+        format="HH:mm:ss"
+        value-format="YYYY-MM-DDTHH:mm:ss.000+00:00"
+        v-model="billboard.eventTime"
+        placeholder="Время"
+      />
+    </div>
+    <div class="datepicker">
+      <div>Дата</div>
+      <el-date-picker
+        value-format="YYYY-MM-DDTHH:mm:ss.000+00:00"
+        v-model="billboard.eventDate"
+        type="datetime"
+        placeholder="Дата"
+      />
+    </div>
+    <div class="place">
+      <el-select v-model="billboard.eventPlace" placeholder="Select">
+        <el-option
+          v-for="(item, index) in places"
+          :key="index"
+          :label="item"
+          :value="index"
         />
-      </div>
-      <div class='billboard__select-item'>
-        <div>Дата</div>
-        <el-date-picker
-          class='billboard__select-item'
-          value-format='YYYY-MM-DDTHH:mm:ss.000+00:00'
-          v-model='billboard.eventDate'
-          type='datetime'
-          placeholder='Дата'
-        />
-      </div>
-      <div class='billboard__select-item'>
-        <div>Место</div>
-        <el-select class='billboard__select-item' v-model='billboard.eventPlace' placeholder='Select'>
-          <el-option
-            v-for='(item, index) in places'
-            :key='index'
-            :label='item'
-            :value='index'
-          />
-        </el-select>
-      </div>
+      </el-select>
     </div>
-    <el-button @click='handleUpdateDate'>Создать</el-button>
+    <el-button @click="handleCreateDate" style="width: max-content">
+      Создать
+    </el-button>
   </div>
 </template>
 
-<style scoped lang='scss'>
-.billboard {
+<style scoped lang="scss">
+.container {
   margin: 0;
   background-color: var(--el-bg-color-overlay);
   border-radius: 10px;
   height: calc(100% - 20px);
   padding: 10px 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 5px 5px;
+  grid-auto-flow: row dense;
+  grid-template-areas:
+    'title phone slug'
+    'editor editor editor'
+    'timepicker datepicker place';
+}
 
-  &__string {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+.title {
+  grid-area: title;
+}
 
-    .el-input {
-      width: 20vw;
-    }
-  }
+.phone {
+  grid-area: phone;
+}
 
-  &__editor {
-    margin: 1vh 0;
-  }
-  &__select {
-    display: flex;
-    justify-content: space-between;
-  }
-  &__select-item {
-    //margin: 0 20px;
-  }
+.slug {
+  grid-area: slug;
+}
+
+.editor {
+  grid-area: editor;
+}
+
+.timepicker {
+  grid-area: timepicker;
+}
+
+.datepicker {
+  grid-area: datepicker;
+}
+
+.place {
+  grid-area: place;
 }
 </style>
