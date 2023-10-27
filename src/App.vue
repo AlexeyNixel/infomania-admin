@@ -1,8 +1,12 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useEntryStore } from '@/stores/entry';
 import { onBeforeMount } from 'vue';
 import { useAdminStore } from '@/stores/admin';
 import { storeToRefs } from 'pinia';
+import { useDark, useToggle } from '@vueuse/core';
+
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
 
 const buttons = [
   {
@@ -49,32 +53,32 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class='admin'>
-    <div class='aside'>
-      <a href='http://dev.infomania.ru' class='aside__title'>INFOMANIA</a>
-      <div class='aside__username'>{{ username }}</div>
-      <div class='aside__item' v-for='(item, index) in buttons' :key='index'>
-        <div class='aside__menu'>{{ item.title }}</div>
-        <div class='aside__link'>
-          <router-link :to='{ name: item.list }' class='aside__path'
-          >
+  <div class="admin">
+    <div class="aside">
+      <a href="http://dev.infomania.ru" class="aside__title">INFOMANIA</a>
+      <div class="aside__username">{{ username }}</div>
+      <div class="aside__item" v-for="(item, index) in buttons" :key="index">
+        <div class="aside__menu">{{ item.title }}</div>
+        <div class="aside__link">
+          <router-link :to="{ name: item.list }" class="aside__path">
             Список
           </router-link>
-          <div class='aside__path'>/</div>
-          <router-link :to='{ name: item.create }' class='aside__path'
-          >
+          <div class="aside__path">/</div>
+          <router-link :to="{ name: item.create }" class="aside__path">
             Создать
           </router-link>
         </div>
       </div>
+      <el-button @click="toggleDark()">Темная тема</el-button>
     </div>
-    <div class='main'>
+
+    <div class="main">
       <RouterView />
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .admin {
   display: flex;
   width: calc(100vw - 10px);
@@ -97,7 +101,7 @@ onBeforeMount(async () => {
     text-align: center;
     font-weight: bold;
     font-size: 2vw;
-    color: white;
+    color: var(--el-text-color);
     margin: 10px 0;
   }
 

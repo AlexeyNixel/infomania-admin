@@ -5,10 +5,11 @@
 }
 
 a {
-  color: aquamarine;
+  color: var(--el-text-color);
   text-decoration: none;
 }
 
 body {
   margin: 0;
+  background: var(--el-bg-color-page);
 }

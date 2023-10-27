@@ -1,0 +1,15 @@
+html {
+    --text-color: #000000;
+    --ck-editor-header-bg: #FAFAFA;
+    --ck-editor-content-bg: #ffffff;
+    --ck-editor-text-color: #333333;
+    --ck-editor-border-color: #afafaf;
+}
+
+html.dark {
+    --text-color: #ffffff;
+    --ck-editor-header-bg: transparent;
+    --ck-editor-content-bg: #141414;
+    --ck-editor-text-color: #333333;
+    --ck-editor-border-color: #333333;
+}
