@@ -1,121 +1,122 @@
 <script setup lang="ts">
-import TheSelect from '@/components/ui/TheSelect.vue';
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 import { useMenuStore } from '@/stores/menu';
-import type { MenuItemType } from '@/types/models';
+import draggable from 'vuedraggable';
+import type { AnyTypeAnnotation } from '@babel/types';
 
+const menuStore = useMenuStore();
+const content = ref<any>();
 const route = useRoute();
 const router = useRouter();
-const menuStore = useMenuStore();
+const drag = ref(false);
+const menuItems = ref<Array<AnyTypeAnnotation>>([]);
 
-const content = ref<any>();
-const slug = ref<string>(route.params.slug as string);
-
-const menuItem = reactive<any>({
+const menu = reactive<any>({
   title: '',
-  slug: '',
-  menuId: '',
-  menuItemType: 'DOCUMENT',
-  link: '',
-  isDeleted: false,
+  isDeleted: '',
+  menuType: '',
+  menuItems: [],
 });
 
-const handleUpdateMenu = async () => {
-  return await menuStore.updateMenuItem(slug.value, menuItem);
+const handleUpdate = async () => {
+  // await documentStore.updateDocument(route.params.slug as string, document);
+  // ElMessage({
+  //   message: 'Документ обновлен',
+  //   type: 'success',
+  // });
+
+  for (let item of menu.menuItems) {
+    menuStore.updateMenuItem(item.id, {
+      position: item.position,
+      slug: item.slug,
+    });
+  }
+
+  // await router.push({ name: 'documents' });
+};
+
+const handleDragEnd = () => {
+  for (let i = 0; i < menuItems.value.length; i++) {
+    menu.menuItems[i].position = i;
+  }
 };
 
 onMounted(async () => {
-  content.value = await menuStore.getMenuItem(slug.value);
-  Object.keys(menuItem).forEach((key) => {
-    menuItem[key] = content.value[key];
+  const { data } = await menuStore.getMenu(route.params.slug as string, {
+    include: 'menuItems',
+  });
+  data.menuItems?.forEach((item: any) => {
+    menuItems.value.push(item);
+  });
+  content.value = data;
+
+  Object.keys(menu).forEach((key) => {
+    menu[key] = content.value[key];
   });
 });
 </script>
 
 <template>
-  <div class="create-menu">
-    <div class="create-menu__item">
-      <div>Название</div>
-      <el-input
-        class="create-menu__field-long"
-        v-model="menuItem.title"></el-input>
-    </div>
-    <div class="create-menu__item">
-      <div>Слаг</div>
-      <el-input
-        class="create-menu__field-long"
-        v-model="menuItem.slug"></el-input>
-    </div>
-    <div class="create-menu__group">
-      <div class="create-menu__item">
-        <div>Тип контента</div>
-        <el-select class="create-menu__field" v-model="menuItem.menuItemType">
-          <el-option value="DOCUMENT" label="Документ" />
-          <el-option value="LINK" label="Ссылка" />
-        </el-select>
+  <div class="container">
+    <div class="menu-update">
+      <div class="menu-update__text">
+        <div class="menu-update__item">
+          <span>Название</span>
+          <el-input v-model="menu.title" />
+        </div>
+        <div class="menu-update__item">
+          <span>Тип</span>
+          <el-input v-model="menu.menuType" />
+        </div>
+
+        <draggable
+          v-model="menu.menuItems"
+          group="people"
+          @end="handleDragEnd()"
+          item-key="id"
+        >
+          <template #item="{ element }">
+            <div class="drag__item">
+              <div>
+                <span style="margin-right: 20px">{{ element.position }}</span>
+                <span>{{ element.title }}</span>
+              </div>
+            </div>
+          </template>
+        </draggable>
+        <div class="menu-update__btn">
+          <el-button @click="handleUpdate">Обновить</el-button>
+        </div>
       </div>
-      <div class="create-menu__item">
-        <div>Меню</div>
-        <the-select
-          class="create-menu__field"
-          entry-order="menu"
-          v-model="menuItem.menuId" />
-      </div>
-    </div>
-    <div class="create-menu__item" v-if="menuItem.menuItemType === 'LINK'">
-      <div>Ссылка</div>
-      <el-input
-        class="create-menu__field-long"
-        v-model="menuItem.link"></el-input>
-    </div>
-    <div class="create-menu__group-short">
-      <el-checkbox v-model="menuItem.isDeleted" label="Удалить" size="large" />
-      <el-button class="create-menu__btn" @click="handleUpdateMenu"
-        >Создать</el-button
-      >
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.create-menu {
-  height: 100%;
+.container {
   display: flex;
-  width: max-content;
-  flex-direction: column;
-  margin: auto;
+  align-items: center;
   justify-content: center;
+  height: 100%;
+}
 
-  &__group {
-    display: flex;
-    justify-content: space-between;
-
-    &-short {
-      width: 240px;
-      justify-content: space-between;
-      display: flex;
-      align-items: center;
-      align-self: end;
-    }
+.drag {
+  &__item {
+    background: #1d1e1f;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px 0;
+    cursor: pointer;
   }
+}
+
+.menu-update {
+  display: flex;
 
   &__item {
-    margin: 10px 0;
-  }
-
-  &__field {
-    width: 240px;
-
-    &-long {
-      width: 500px;
-    }
-  }
-
-  &__btn {
-    margin: 10px 0;
-    border-radius: 10px;
-    align-self: end;
+    margin: 20px 0;
   }
 }
 </style>

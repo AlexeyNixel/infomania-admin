@@ -135,6 +135,8 @@ export type MenuType = {
   title: string;
   menuType: string;
   menuItems: MenuItemType[];
+  createdAt: string;
+  isDeleted: boolean;
 };
 
 export type UserType = {

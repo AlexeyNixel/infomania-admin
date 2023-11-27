@@ -32,7 +32,7 @@ const buttons = [
   {
     title: 'Меню',
     list: 'menu',
-    create: 'menuCreate',
+    create: 'slidesCreate',
   },
   {
     title: 'Афиша',

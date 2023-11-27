@@ -6,21 +6,24 @@ const { MENU_ROUTE } = Routes;
 const { MENU_ITEM_ROUTE } = Routes;
 const { DOCUMENT_ROUTE } = Routes;
 
+export const findMenu = async (slug: string, params?: ParamsType) => {
+  return await axiosApi.get(`${MENU_ROUTE}${slug}`, { params });
+};
+
 export const findMenus = async (params?: ParamsType): Promise<any> => {
+  const { data } = await axiosApi.get(MENU_ROUTE, { params });
+  return data;
+};
+
+export const findMenuItems = async (params?: ParamsType): Promise<any> => {
   return await axiosApi.get(MENU_ITEM_ROUTE, { params });
 };
 
-export const findMenu = async (
-  slug: string,
-  params?: ParamsType,
-): Promise<any> => {
+export const findMenuItem = async (slug: string, params?: ParamsType) => {
   return await axiosApi.get(`${MENU_ITEM_ROUTE}${slug}`, { params });
 };
 
-export const findDocument = async (
-  id: string,
-  params?: ParamsType,
-): Promise<any> => {
+export const findDocument = async (id: string, params?: ParamsType) => {
   return await axiosApi.get(`${DOCUMENT_ROUTE}${id}`, { params });
 };
 

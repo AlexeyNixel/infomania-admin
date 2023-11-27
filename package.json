@@ -21,7 +21,8 @@
     "prettier": "^3.0.3",
     "slugify": "^1.6.6",
     "vue": "^3.3.4",
-    "vue-router": "^4.2.4"
+    "vue-router": "^4.2.4",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
