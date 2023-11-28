@@ -1,4 +1,10 @@
-import { findMenu, putMenuItem } from './../api/menu';
+import {
+  findMenu,
+  putMenuItem,
+  findMenuItems,
+  findMenuItem,
+  putMenu,
+} from './../api/menu';
 import type { ParamsType } from '@/types/models';
 import { findMenus } from '@/api/menu';
 import { defineStore } from 'pinia';
@@ -14,13 +20,30 @@ export const useMenuStore = defineStore('menu', () => {
     return { data, meta };
   };
 
+  const getMenuItems = async (params?: ParamsType) => {
+    const { data, meta } = await findMenuItems(params);
+    return { data, meta };
+  };
+
+  const getMenuItem = async (id: string, params?: ParamsType): Promise<any> => {
+    const { data } = await findMenuItem(id, params);
+    return { data };
+  };
+
   const updateMenuItem = async (id: string, data: any) => {
     return await putMenuItem(id, data);
+  };
+
+  const updateMenu = async (id: string, data: any) => {
+    return await putMenu(id, data);
   };
 
   return {
     getMenu,
     getMenus,
+    getMenuItems,
+    getMenuItem,
     updateMenuItem,
+    updateMenu,
   };
 });

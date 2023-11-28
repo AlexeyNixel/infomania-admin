@@ -16,7 +16,8 @@ export const findMenus = async (params?: ParamsType): Promise<any> => {
 };
 
 export const findMenuItems = async (params?: ParamsType): Promise<any> => {
-  return await axiosApi.get(MENU_ITEM_ROUTE, { params });
+  const { data } = await axiosApi.get(MENU_ITEM_ROUTE, { params });
+  return data;
 };
 
 export const findMenuItem = async (slug: string, params?: ParamsType) => {
@@ -46,4 +47,8 @@ export const postMenuItem = async (data: any) => {
 
 export const putMenuItem = async (id: string, data: any) => {
   return await axiosApi.put(`${MENU_ITEM_ROUTE}${id}`, data);
+};
+
+export const putMenu = async (id: string, data: any) => {
+  return await axiosApi.put(`${MENU_ROUTE}${id}`, data);
 };

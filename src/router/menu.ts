@@ -9,19 +9,9 @@ export const menuRoute = [
     name: 'menuUpdate',
     component: () => import('../views/menu/MenuUpdate.vue'),
   },
-  // {
-  //   path: '/menu-item',
-  //   name: 'menuItem',
-  //   component: () => import('../views/menu-item/MenuItemList.vue'),
-  // },
-  // {
-  //   path: '/menu-item/update/:slug',
-  //   name: 'menuItemUpdate',
-  //   component: () => import('../views/menu-item/MenuItemUpdate.vue'),
-  // },
-  // {
-  //   path: '/menu-item/create/',
-  //   name: 'menuItemCreate',
-  //   component: () => import('../views/menu-item/MenuItemCreate.vue'),
-  // },
+  {
+    path: '/menu-item/update/:id',
+    name: 'menuItemUpdate',
+    component: () => import('../views/menu/MenuItemUpdate.vue'),
+  },
 ];
