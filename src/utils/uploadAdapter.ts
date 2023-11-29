@@ -13,22 +13,23 @@ class UploadAdapter {
   async upload() {
     const data = new FormData();
 
-    const name = (await this.loader.file).name
+    const name = (await this.loader.file).name;
 
     data.append('file', await this.loader.file);
-    data.append('filename', slugify(name, {
-      replacement: '-',
-      remove: /\.,?!\+=\*:;/g,
-      lower: true,
-      strict: false,
-      locale: 'ru',
-      trim: true,
-    }));
-
+    data.append(
+      'filename',
+      slugify(name, {
+        replacement: '-',
+        remove: /\.,?!\+=\*:;/g,
+        lower: true,
+        strict: false,
+        locale: 'ru',
+        trim: true,
+      })
+    );
 
     return new Promise((resolve, reject) => {
-
-      fetch(`http://localhost:3000/api/upload`, {
+      fetch(`http://api.infomania.ru/api/upload`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
