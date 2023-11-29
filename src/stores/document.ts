@@ -1,5 +1,11 @@
 import { defineStore } from 'pinia';
-import { findDocument, findDocuments, findMenus, postDocument, putDocument } from '@/api/menu';
+import {
+  findDocument,
+  findDocuments,
+  findMenus,
+  postDocument,
+  putDocument,
+} from '@/api/menu';
 import type { ParamsType } from '@/types/models';
 
 export const useDocumentStore = defineStore('document', () => {
@@ -18,10 +24,11 @@ export const useDocumentStore = defineStore('document', () => {
   };
 
   const createDocument = async (data: object) => {
-    return await postDocument(data)
+    return await postDocument(data);
   };
 
   const getDocument = async (slug: string, params?: ParamsType) => {
+    //@ts-ignore
     const { data, meta } = await findDocument(slug, params);
     return { data, meta };
   };
