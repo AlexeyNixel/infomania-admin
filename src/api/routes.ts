@@ -15,6 +15,7 @@ export enum Routes {
   MAIN_SLIDER_ROUTE = '/api/main-slider/',
   FILE_ROUTE = '/api/file/',
   DOCUMENT_ROUTE = '/api/document/',
+  NOTIFICATION_ROUTE = '/api/notification/',
 }
 
 export const getUrl = (url: Routes, params?: string) => {

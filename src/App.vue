@@ -39,6 +39,11 @@ const buttons = [
     list: 'billboard',
     create: 'billboardCreate',
   },
+  {
+    title: 'Уведомления',
+    list: 'notification',
+    create: 'notificationCreate',
+  },
 ];
 
 const entryStore = useEntryStore();
