@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useEntryStore } from '@/stores/entry';
 import { onMounted, reactive, ref } from 'vue';
 import TheEditor from '@/components/ui/TheEditor.vue';
@@ -23,10 +23,12 @@ const entry = reactive<any>({
   departmentId: '',
   publishedAt: '',
   isDeleted: false,
+  pinned: false,
 });
 const slug = ref<string>(route.params.slug as string);
 
 const handleUpdateData = async () => {
+  entry.content = entry.content.replaceAll(/'|«|»/g, '"');
   await entryStore.updateEntry(slug.value, entry);
   ElMessage({
     message: 'Новость обновлена',
@@ -46,63 +48,64 @@ onMounted(async () => {
   const { rubrics } = content.value || {};
   preview.value = content.value.preview.path || undefined;
   entry.rubrics = rubrics.map((item: { rubricId: string }) => item.rubricId);
-
 });
-
 </script>
 
 <template>
-  <div class='entry' v-if='entry'>
-    <div class='image'>
-      <the-upload :current-image='preview' v-model='entry.fileId' />
+  <div class="entry" v-if="entry">
+    <div class="image">
+      <the-upload :current-image="preview" v-model="entry.fileId" />
     </div>
-    <div class='fields'>
-      <div class='title'>
+    <div class="fields">
+      <div class="title">
         <span>Название</span>
-        <el-input
-          v-model='entry.title'
-        />
+        <el-input v-model="entry.title" />
       </div>
-      <div class='desc'>
+      <div class="desc">
         <span>Описание</span>
-        <el-input
-          v-model='entry.desc'
-        />
+        <el-input v-model="entry.desc" />
       </div>
-      <div class='slug'>
+      <div class="slug">
         <span>Слаг</span>
-        <el-input
-          v-model='entry.slug'
+        <el-input v-model="entry.slug" />
+      </div>
+      <div class="disabled">
+        <el-checkbox
+          v-model="entry.pinned"
+          label="Главная новость"
+          size="large"
         />
       </div>
     </div>
-    <div class='editor'>
-      <TheEditor v-model='entry.content' />
+    <div class="editor">
+      <TheEditor v-model="entry.content" />
     </div>
-    <div class='department'>
+    <div class="department">
       <div>Отдел</div>
-      <the-select v-model='entry.departmentId' entryOrder='department' />
+      <the-select v-model="entry.departmentId" entryOrder="department" />
     </div>
-    <div class='rubric'>
+    <div class="rubric">
       <div>Рубрики</div>
-      <the-select v-model='entry.rubrics' entryOrder='rubric' />
+      <the-select v-model="entry.rubrics" entryOrder="rubric" />
     </div>
-    <div class='date'>
+    <div class="date">
       <div>Дата</div>
-      <el-date-picker
-        v-model='entry.publishedAt'
+      <VueDatePicker
+        v-model="entry.publishedAt"
+        locale="ru"
+        format="dd/MM/yyyy HH:mm"
       />
     </div>
-    <div class='document'>
-      <the-upload-document/>
+    <div class="document">
+      <the-upload-document />
     </div>
-    <div class='button'>
-      <el-button @click='handleUpdateData'>Обновить</el-button>
+    <div class="button">
+      <el-button @click="handleUpdateData">Обновить</el-button>
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 :deep(.el-input__wrapper) {
   border-radius: 10px;
 }
@@ -124,10 +127,10 @@ onMounted(async () => {
   gap: 5px 5px;
   grid-auto-flow: row dense;
   grid-template-areas:
-    "image fields fields fields fields"
-    "editor editor editor editor editor"
-    "department rubric date document document"
-    "button . . . .";
+    'image fields fields fields fields'
+    'editor editor editor editor editor'
+    'department rubric date document document'
+    'button . . . .';
 }
 
 .editor {
@@ -169,9 +172,9 @@ onMounted(async () => {
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas:
-    "title title title"
-     "desc desc desc"
-    "slug slug slug";
+    'title title title'
+    'desc desc desc'
+    'slug slug slug';
 
   grid-area: fields;
 }
@@ -187,6 +190,4 @@ onMounted(async () => {
 .desc {
   grid-area: desc;
 }
-
-
 </style>

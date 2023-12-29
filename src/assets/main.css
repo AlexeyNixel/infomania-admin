@@ -5,8 +5,9 @@
 }
 
 a {
-  color: var(--el-text-color);
-  text-decoration: none;
+  /* text-decoration: underline !important; */
+  color: green !important;
+  font-weight: bold;
 }
 
 body {

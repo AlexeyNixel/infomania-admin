@@ -3,7 +3,6 @@
     <ckeditor
       class="editor"
       :editor="editor"
-      :config="editorConfig"
       :model-value="modelValue"
       @update:model-value="handleChangeValue"
     />
@@ -11,10 +10,10 @@
 </template>
 
 <script lang="ts" setup>
-import '@/plugins/ckeditor/ckeditor.js';
+// import '@/plugins/ckeditor/ckeditor.js';
+import '@/plugins/ckeditor/baloon/ckeditor.js';
 import { uploadAdapter } from '@/utils/uploadAdapter';
 import { ref } from 'vue';
-
 type PropsType = {
   modelValue?: string;
   field?: string;
@@ -68,11 +67,11 @@ const editorConfig = ref({
   },
 });
 //@ts-ignore
-const editor = ClassicEditor;
+const editor = BalloonEditor;
 defineProps<PropsType>();
 
 const emit = defineEmits(['update:modelValue']);
-//@ts-ignore
+
 
 const handleChangeValue = (value: string) => {
   emit('update:modelValue', value);

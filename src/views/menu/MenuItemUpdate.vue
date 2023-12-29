@@ -76,6 +76,10 @@ onMounted(async () => {
           <the-select v-model="menuItem.menuId" entry-order="menu" />
         </div>
       </div>
+      <div class="item" v-if="menuItem.menuItemType === 'LINK'">
+        <div>Ссылка</div>
+        <el-input v-model="menuItem.link"></el-input>
+      </div>
       <div class="flex justify-end my-3">
         <el-button @click="handleUpdateMenuItem()">Обновить</el-button>
       </div>
