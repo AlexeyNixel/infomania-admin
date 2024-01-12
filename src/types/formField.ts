@@ -7,25 +7,25 @@ enum FieldName {
   TEXT = 'text',
 }
 
-type HeaderType = {
+export type HeaderType = {
   title: string;
 };
 
-type LongTextType = {
+export type LongTextType = {
   text: string;
 };
 
-type shortTextType = {
+export type shortTextType = {
   text: string;
 };
 
-type SimpleQuestion = {
+export type SimpleQuestion = {
   id: string
   text: string;
   answer: string;
 };
 
-type RadioQuestion = {
+export type RadioQuestion = {
   text: string;
   questions: string[];
   answer: string;

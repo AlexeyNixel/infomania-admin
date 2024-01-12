@@ -1,6 +1,13 @@
 <template>
   <div>
-    <el-input :model-value="modelValue" @update:model-value="handleChangeValue" placeholder="Заголовок"></el-input>
+    <ckeditor
+      class="p-2 rounded-[10px] ring-1 ring-white text-2xl"
+      :editor="editor"
+      aria-placeholder="Заголовок"
+      :config="config"
+      :model-value="modelValue"
+      @update:model-value="handleChangeValue"
+    />
   </div>
 </template>
 
@@ -29,11 +36,7 @@ const config = {
   margin: 0 !important;
 }
 
-.ck.ck-editor__editable_inline> :last-child {
+.ck.ck-editor__editable_inline > :last-child {
   margin: 5px 0;
-}
-
-:deep(.el-input__inner) {
-  @apply text-2xl font-bold;
 }
 </style>
