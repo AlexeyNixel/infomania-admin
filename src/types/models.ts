@@ -161,6 +161,7 @@ enum AffichePlacesEnum {
   SPACE_TYPE_ALL = 'all',
   SPACE_TYPE_OUT = 'out',
   SPACE_TYPE_GUEST = 'guest',
+  SPACE_TYPE_GUEST_2 = 'guest_2',
   SPACE_TYPE_ITCLASS = 'itclass',
   SPACE_TYPE_ITCLASS_1 = 'itclass_1',
   SPACE_TYPE_ITCLASS_2 = 'itclass_2',
@@ -182,6 +183,7 @@ export const AffichePlaces: { [key in AffichePlacesEnum]: string } = {
   [AffichePlacesEnum.SPACE_TYPE_ALL]: 'Все помещения библиотеки',
   [AffichePlacesEnum.SPACE_TYPE_OUT]: 'Выездное',
   [AffichePlacesEnum.SPACE_TYPE_GUEST]: 'Гостиная',
+  [AffichePlacesEnum.SPACE_TYPE_GUEST_2]: 'Гостиная (Цоколь)',
   [AffichePlacesEnum.SPACE_TYPE_ITCLASS]: 'IT-класс (весь)',
   [AffichePlacesEnum.SPACE_TYPE_ITCLASS_1]:
     'Компьютерный класс (секция с компьютерами)',

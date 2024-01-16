@@ -20,6 +20,11 @@ const router = createRouter({
       name: 'auth',
       component: () => import('../views/Auth.vue'),
     },
+    {
+      path: '/other',
+      name: 'other',
+      component: () => import('../views/other.vue'),
+    },
     ...entryRoute,
     ...departmentRoute,
     ...sliderRoute,

@@ -68,7 +68,8 @@ const handleCreateDate = async () => {
       />
     </div>
     <div class="place">
-      <el-select v-model="billboard.eventPlace" placeholder="Select">
+      <div>Помещение</div>
+      <el-select v-model="billboard.eventPlace" placeholder="Выбрать">
         <el-option
           v-for="(item, index) in places"
           :key="index"
