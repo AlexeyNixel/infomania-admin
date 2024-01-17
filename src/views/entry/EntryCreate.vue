@@ -93,7 +93,7 @@ const handleCreateData = async () => {
   margin: 0;
   background-color: var(--el-bg-color-overlay);
   border-radius: 10px;
-  height: calc(100% - 20px);
+  height: calc(100%);
   padding: 10px 10px;
 
   display: grid;

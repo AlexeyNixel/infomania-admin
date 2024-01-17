@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useSliderStore } from '@/stores/slider';
 import { onMounted, ref } from 'vue';
 import type { SliderType } from '@/types/models';
@@ -8,6 +8,10 @@ import { useRouter } from 'vue-router';
 const sliderStore = useSliderStore();
 const slides = ref<SliderType[]>();
 const router = useRouter();
+
+const handleDeleteSlide = async (slug: string, status: boolean) => {
+  await sliderStore.updateSlide(slug, { isDeleted: status });
+};
 
 onMounted(async () => {
   const { data } = await sliderStore.getSlides({
@@ -19,27 +23,36 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class='list'>
-    <div class='list__header'>
-      <div class='list__field-long'>Название</div>
-      <div class='list__field'>Дата</div>
-      <div class='list__field'>Статус</div>
+  <div class="list">
+    <div class="list__header">
+      <div class="list__field-long">Название</div>
+      <div class="list__field">Дата</div>
+      <div class="list__field">Статус</div>
     </div>
     <el-scrollbar>
-      <div class='list-item' v-for='item in slides' :key='item.id'>
-        <router-link :to='{name:"slidesUpdate", params:{slug:item.id}}' class='list-item__field-long'>{{ item.title }}</router-link>
-        <div class='list-item__field'>
+      <div class="list-item" v-for="item in slides" :key="item.id">
+        <router-link
+          :to="{ name: 'slidesUpdate', params: { slug: item.id } }"
+          class="list-item__field-long"
+          >{{ item.title }}</router-link
+        >
+        <div class="list-item__field">
           {{ dayjs(item.publishedAt).format('DD.MM.YYYY') }}
         </div>
-        <div class='list-item__field'>
-          <el-checkbox v-model='item.isDeleted' label='Удален' size='large' />
+        <div class="list-item__field">
+          <el-checkbox
+            @change="handleDeleteSlide(item.id, item.isDeleted)"
+            v-model="item.isDeleted"
+            label="Удален"
+            size="large"
+          />
         </div>
       </div>
     </el-scrollbar>
   </div>
 </template>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .list {
   background-color: var(--el-bg-color-overlay);
   border-radius: 10px;
@@ -59,7 +72,6 @@ onMounted(async () => {
       width: 78%;
       text-align: center;
       border-right: 1px solid white;
-
     }
   }
 }

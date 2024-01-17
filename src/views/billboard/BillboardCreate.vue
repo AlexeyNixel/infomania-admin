@@ -32,7 +32,7 @@ const handleCreateDate = async () => {
 </script>
 
 <template>
-  <div class="container">
+  <div class="billboard">
     <div class="title">
       <div>Название</div>
       <el-input v-model="billboard.title" />
@@ -85,11 +85,11 @@ const handleCreateDate = async () => {
 </template>
 
 <style scoped lang="scss">
-.container {
+.billboard {
   margin: 0;
   background-color: var(--el-bg-color-overlay);
   border-radius: 10px;
-  height: calc(100% - 20px);
+  height: calc(100%);
   padding: 10px 10px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
