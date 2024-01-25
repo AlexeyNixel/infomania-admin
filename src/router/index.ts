@@ -1,3 +1,4 @@
+import { bookRoute } from './book';
 import { createRouter, createWebHistory } from 'vue-router';
 import { entryRoute } from '@/router/entry';
 import { departmentRoute } from '@/router/department';
@@ -31,6 +32,7 @@ const router = createRouter({
     ...documentRoute,
     ...menuRoute,
     ...billboardRoute,
+    ...bookRoute,
     ...notificationRoute,
   ],
 });

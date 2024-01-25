@@ -35,6 +35,11 @@ const buttons = [
     create: 'slidesCreate',
   },
   {
+    title: 'Книги',
+    list: 'book',
+    create: 'bookCreate',
+  },
+  {
     title: 'Афиша',
     list: 'billboard',
     create: 'billboardCreate',
