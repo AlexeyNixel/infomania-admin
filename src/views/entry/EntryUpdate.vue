@@ -5,7 +5,7 @@ import TheEditor from '@/components/ui/TheEditor.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
 import TheUpload from '@/components/ui/TheUpload.vue';
 import { useRoute, useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
+import { ElMessage, dayjs } from 'element-plus';
 import TheUploadDocument from '@/components/ui/TheUploadDocument.vue';
 
 const route = useRoute();
@@ -28,6 +28,9 @@ const entry = reactive<any>({
 const slug = ref<string>(route.params.slug as string);
 
 const handleUpdateData = async () => {
+  entry.publishedAt = dayjs(entry.publishedAt).format(
+    'YYYY-MM-DDTHH:mm:ss.SSS+00:00'
+  );
   await entryStore.updateEntry(slug.value, entry);
   ElMessage({
     message: 'Новость обновлена',

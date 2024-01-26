@@ -2,7 +2,7 @@
 import { useEntryStore } from '@/stores/entry';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
+import { ElMessage, dayjs } from 'element-plus';
 import TheEditor from '@/components/ui/TheEditor.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
 import TheUpload from '@/components/ui/TheUpload.vue';
@@ -25,6 +25,9 @@ const entry = reactive<any>({
 });
 
 const handleCreateData = async () => {
+  entry.publishedAt = dayjs(entry.publishedAt).format(
+    'YYYY-MM-DDTHH:mm:ss.SSS+00:00'
+  );
   await entryStore.createEntry(entry);
   ElMessage({
     message: 'Новость создана',
