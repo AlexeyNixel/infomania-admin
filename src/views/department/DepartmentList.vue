@@ -1,51 +1,72 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import dayjs from 'dayjs';
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
-import type { DepartmentType } from '@/types/models';
 import { useDepartmentStore } from '@/stores/department';
+import type { DepartmentResponseType } from '@/types/department-model';
 
 const departmentStore = useDepartmentStore();
-const department = ref<DepartmentType[]>();
+const department = ref<DepartmentResponseType>();
 
 const route = useRoute();
 const router = useRouter();
 
-onMounted(async () => {
-  const { data } = await departmentStore.getDepartments({ isDeleted: true });
-  console.log(data);
-  department.value = data;
-});
+const handleDelete = async (id: string, status: boolean) => {
+  await departmentStore.updateDepartment(id, { isDeleted: status });
+};
 
+onMounted(async () => {
+  department.value = await departmentStore.getDepartments({ isDeleted: true });
+});
 </script>
 
 <template>
-  <div class='list'>
-    <div class='list__header'>
-      <div class='list__field-long'>Название</div>
-      <div class='list__field'>Дата</div>
-      <div class='list__field'>Статус</div>
-    </div>
-    <el-scrollbar>
-      <div class='list-item' v-for='item in department' :key='item.id'>
+  <div class="list">
+    <div
+      class="grid sticky grid-cols-5 gap-y-2 px-2 max-h-[94%] overflow-y-scroll"
+    >
+      <div class="text-center col-span-2">Название</div>
+      <div class="text-center">Дата</div>
+      <div class="text-center">Статус</div>
+      <div class="text-center">Ссылка</div>
+      <div
+        v-if="department"
+        class="grid grid-cols-5 col-span-5 dark:odd:bg-neutral-800 odd:bg-neutral-200 py-1 px-2 rounded-lg"
+        v-for="item in department.data"
+      >
         <router-link
-          :to='{name:"departmentUpdate", params:{slug:item.id}}'
-          class='list-item__field-long'
+          :to="{ name: 'documentUpdate', params: { slug: item.id } }"
+          class="col-span-2 my-auto hover:underline"
         >
           {{ item.title }}
         </router-link>
-        <div class='list-item__field'>
-          {{ dayjs(item.publishedAt).format('DD.MM.YYYY') }}
+        <div class="text-center m-auto">
+          {{ dayjs(new Date()).format('DD.MM.YYYY ') }}
         </div>
-        <div class='list-item__field'>
-          <el-checkbox v-model='item.isDeleted' label='Удален' size='large' />
+        <div class="text-center m-auto">
+          <el-checkbox
+            @change="handleDelete(item.id, item.isDeleted)"
+            v-model="item.isDeleted"
+            label="Скрыта"
+            size="large"
+          />
         </div>
+        <a
+          class="text-center m-auto"
+          :href="`http://dev.infomania.ru/entry/search/${item.id}`"
+        >
+          <img
+            style="width: 30px; color: white"
+            src="/external-link.svg"
+            alt=""
+          />
+        </a>
       </div>
-    </el-scrollbar>
+    </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .list {
   background-color: var(--el-bg-color-overlay);
   border-radius: 10px;
@@ -65,7 +86,6 @@ onMounted(async () => {
       width: 78%;
       text-align: center;
       border-right: 1px solid white;
-
     }
   }
 }

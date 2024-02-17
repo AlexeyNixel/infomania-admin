@@ -1,54 +1,95 @@
 <script setup lang="ts">
 import { useSliderStore } from '@/stores/slider';
 import { onMounted, ref } from 'vue';
-import type { SliderType } from '@/types/models';
+
 import dayjs from 'dayjs';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
+import type { SlideResponseType } from '@/types/slide-model';
 
 const sliderStore = useSliderStore();
-const slides = ref<SliderType[]>();
+const slides = ref<SlideResponseType>();
 const router = useRouter();
+const route = useRoute();
 
-const handleDeleteSlide = async (slug: string, status: boolean) => {
+const page = ref<number>(Number(route.query.page) || 1);
+
+const handleDelete = async (slug: string, status: boolean) => {
   await sliderStore.updateSlide(slug, { isDeleted: status });
 };
 
-onMounted(async () => {
-  const { data } = await sliderStore.getSlides({
+const handleNavigate = async () => {
+  router.push({ name: 'slides', query: { page: page.value } });
+  await fetchData();
+};
+
+const fetchData = async () => {
+  slides.value = await sliderStore.getSlides({
     isDeleted: true,
     pageSize: 30,
+    orderBy: '-createdAt',
+    page: page.value,
   });
-  slides.value = data;
+};
+
+onMounted(async () => {
+  await fetchData();
 });
 </script>
 
 <template>
   <div class="list">
-    <div class="list__header">
-      <div class="list__field-long">Название</div>
-      <div class="list__field">Дата</div>
-      <div class="list__field">Статус</div>
-    </div>
-    <el-scrollbar>
-      <div class="list-item" v-for="item in slides" :key="item.id">
+    <div
+      v-if="slides"
+      class="grid sticky grid-cols-5 gap-y-2 px-2 max-h-[94%] overflow-y-scroll"
+    >
+      <div class="text-center col-span-2">Название</div>
+      <div class="text-center">Дата</div>
+      <div class="text-center">Статус</div>
+      <div class="text-center">Ссылка</div>
+      <div
+        v-if="slides"
+        class="grid grid-cols-5 col-span-5 dark:odd:bg-neutral-800 odd:bg-neutral-200 py-1 px-2 rounded-lg"
+        v-for="item in slides.data"
+      >
         <router-link
-          :to="{ name: 'slidesUpdate', params: { slug: item.id } }"
-          class="list-item__field-long"
-          >{{ item.title }}</router-link
+          :to="{ name: 'documentUpdate', params: { slug: item.id } }"
+          class="col-span-2 my-auto hover:underline"
         >
-        <div class="list-item__field">
-          {{ dayjs(item.publishedAt).format('DD.MM.YYYY') }}
+          {{ item.title }}
+        </router-link>
+        <div class="text-center m-auto">
+          {{ dayjs(item.createdAt).format('DD.MM.YYYY ') }}
         </div>
-        <div class="list-item__field">
+        <div class="text-center m-auto">
           <el-checkbox
-            @change="handleDeleteSlide(item.id, item.isDeleted)"
+            @change="handleDelete(item.id, item.isDeleted)"
             v-model="item.isDeleted"
-            label="Удален"
+            label="Скрыта"
             size="large"
           />
         </div>
+        <a
+          class="text-center m-auto"
+          :href="`http://dev.infomania.ru/document/${item.id}`"
+        >
+          <img
+            style="width: 30px; color: white"
+            src="/external-link.svg"
+            alt=""
+          />
+        </a>
       </div>
-    </el-scrollbar>
+    </div>
+    <el-pagination
+      v-if="slides"
+      v-model:current-page="page"
+      v-model:page-size="slides.meta.pageSize"
+      v-model:total="slides.meta.total"
+      @current-change="handleNavigate"
+      class="flex justify-center my-6"
+      layout="prev, pager, next"
+      background
+    />
   </div>
 </template>
 
@@ -57,43 +98,6 @@ onMounted(async () => {
   background-color: var(--el-bg-color-overlay);
   border-radius: 10px;
   height: 100%;
-
-  &__header {
-    display: flex;
-    padding: 15px;
-  }
-
-  &__field {
-    width: 16.66%;
-    border-right: 1px solid white;
-    text-align: center;
-
-    &-long {
-      width: 78%;
-      text-align: center;
-      border-right: 1px solid white;
-    }
-  }
-}
-
-.list-item {
-  display: flex;
-  padding: 1vh 15px;
-  margin: 1vh 0;
-
-  &__field {
-    width: 16.66%;
-    text-align: center;
-
-    &-long {
-      width: 78%;
-
-      &:hover {
-        cursor: pointer;
-        text-decoration: underline;
-      }
-    }
-  }
 }
 
 :deep(.el-scrollbar) {

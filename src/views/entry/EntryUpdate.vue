@@ -36,7 +36,7 @@ const handleUpdateData = async () => {
     message: 'Новость обновлена',
     type: 'success',
   });
-  await router.push({ name: 'entries' });
+  await router.push({ name: 'entries' }); 
 };
 
 onMounted(async () => {

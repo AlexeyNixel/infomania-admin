@@ -1,13 +1,14 @@
 import { postBook, findBooks, findBook, putBook } from './../api/book';
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
+import type { ParamsType } from '@/types/models';
 
 export const useBookStore = defineStore('book', () => {
   const book = ref();
 
-  const getBooks = async () => {
-    const {data} = await findBooks();
-    return data
+  const getBooks = async (params?: ParamsType) => {
+    const { data } = await findBooks(params);
+    return data;
   };
 
   const getBook = async (id: string) => {

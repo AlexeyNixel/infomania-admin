@@ -6,41 +6,82 @@ import type { DepartmentType } from '@/types/models';
 import { useBookStore } from '@/stores/book';
 
 const bookStore = useBookStore();
-const department = ref<DepartmentType[]>();
-
 const route = useRoute();
 const router = useRouter();
 
+const page = ref<number>(Number(route.query.page) || 1);
+const book = ref<any>();
+
+const handleNavigate = async () => {
+  router.push({ name: 'book', query: { page: page.value } });
+  fetchData();
+};
+
+const fetchData = async () => {
+  book.value = await bookStore.getBooks({
+    page: page.value,
+    pageSize: 30,
+  });
+};
+
 onMounted(async () => {
-  const { data } = await bookStore.getBooks();
-  console.log(data);
-  department.value = data;
+  fetchData();
 });
 </script>
 
 <template>
   <div class="list">
-    <div class="list__header">
-      <div class="list__field-long">Название</div>
-      <div class="list__field">Дата</div>
-      <div class="list__field">Статус</div>
-    </div>
-    <el-scrollbar>
-      <div class="list-item" v-for="item in department" :key="item.id">
+    <div
+      v-if="book"
+      class="grid sticky grid-cols-5 gap-y-2 px-2 max-h-[94%] overflow-y-scroll"
+    >
+      <div class="text-center col-span-2">Название</div>
+      <div class="text-center">Дата</div>
+      <div class="text-center">Статус</div>
+      <div class="text-center">Ссылка</div>
+      <div
+        class="grid grid-cols-5 col-span-5 dark:odd:bg-neutral-800 odd:bg-neutral-200 py-1 px-2 rounded-lg"
+        v-for="item in book.data"
+      >
         <router-link
-          :to="{ name: 'bookUpdate', params: { slug: item.id } }"
-          class="list-item__field-long"
+          :to="{ name: 'documentUpdate', params: { slug: item.id } }"
+          class="col-span-2 my-auto hover:underline"
         >
           {{ item.title }}
         </router-link>
-        <div class="list-item__field">
-          {{ dayjs(item.publishedAt).format('DD.MM.YYYY') }}
+        <div class="text-center m-auto">
+          {{ dayjs(new Date()).format('DD.MM.YYYY ') }}
         </div>
-        <div class="list-item__field">
-          <el-checkbox v-model="item.isDeleted" label="Удален" size="large" />
+        <div class="text-center m-auto">
+          <el-checkbox
+            @change="handleDelete(item.id, item.isDeleted)"
+            v-model="item.isDeleted"
+            label="Скрыта"
+            size="large"
+          />
         </div>
+        <a
+          class="text-center m-auto"
+          :href="`http://dev.infomania.ru/document/${item.id}`"
+        >
+          <img
+            style="width: 30px; color: white"
+            src="/external-link.svg"
+            alt=""
+          />
+        </a>
       </div>
-    </el-scrollbar>
+    </div>
+    <el-pagination
+      v-if="book"
+      v-model:current-page="page"
+      :page-size="Number(book.meta.pageSize)"
+      :total="book.meta.total"
+      @current-change="handleNavigate"
+      class="flex justify-center my-6"
+      layout="prev, pager, next"
+      background
+    />
   </div>
 </template>
 

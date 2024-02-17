@@ -7,7 +7,9 @@ export const axiosApi = axios.create({
 });
 
 axiosApi.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8';
-axiosApi.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')!}`;
+axiosApi.defaults.headers.common[
+  'Authorization'
+] = `Bearer ${localStorage.getItem('token')!}`;
 
 axiosApi.interceptors.response.use(
   (response) => {
@@ -15,11 +17,11 @@ axiosApi.interceptors.response.use(
   },
   (error) => {
     if (error.response.status && error.response.status === 401) {
-      localStorage.removeItem('token')
+      localStorage.removeItem('token');
       router.push({ name: 'auth' });
-      return error
+      return error;
     } else {
-      return error
+      return error;
     }
   }
 );

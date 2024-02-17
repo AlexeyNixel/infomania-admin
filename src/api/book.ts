@@ -1,7 +1,8 @@
+import type { ParamsType } from '@/types/models';
 import { axiosApi } from './axios';
 
-export const findBooks = async () => {
-  return await axiosApi.get('/api/book');
+export const findBooks = async (params?: ParamsType) => {
+  return await axiosApi.get('/api/book', { params });
 };
 
 export const findBook = async (id: string) => {

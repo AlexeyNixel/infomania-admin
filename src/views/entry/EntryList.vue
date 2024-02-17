@@ -1,37 +1,33 @@
 <script setup lang="ts">
 import { useEntryStore } from '@/stores/entry';
-import type { EntryType } from '@/types/models';
 import { onMounted, ref } from 'vue';
 import dayjs from 'dayjs';
 import { useRoute, useRouter } from 'vue-router';
+import type { EntryResponseType } from '@/types/entry-model';
 
 const route = useRoute();
 const router = useRouter();
 const entryStore = useEntryStore();
-const entries = ref<EntryType[]>();
-
-const totalPage = ref<number>(1);
+const entries = ref<EntryResponseType>();
 const page = ref<number>(Number(route.query.page) || 1);
 
-const handleDelete = async (status: boolean, entry: EntryType) => {
-  await entryStore.deleteEntry(status, entry);
+const handleDelete = async (id: string, status: boolean) => {
+  await entryStore.updateEntry(id, { isDeleted: status });
 };
 
-const fetchData = async (val?: number) => {
-  if (val) {
-    page.value = val;
-  }
-
-  const { data, meta } = await entryStore.getEntries({
+const fetchData = async () => {
+  entries.value = await entryStore.getEntries({
     include: 'rubrics',
     pageSize: 30,
-    isDeleted: true,
+    isDeleted: 'true',
     page: page.value,
-    orderBy: '-createdAt',
+    orderBy: '-publishedAt',
   });
+};
 
-  totalPage.value = meta.pages;
-  entries.value = data;
+const handleNavigate = async () => {
+  router.push({ path: '/entries', query: { page: page.value } });
+  fetchData();
 };
 
 onMounted(async () => {
@@ -41,46 +37,57 @@ onMounted(async () => {
 
 <template>
   <div class="list">
-    <div class="list__header">
-      <div class="list__field-long">Название</div>
-      <div class="list__field">Дата</div>
-      <div class="list__field">Статус</div>
-      <div class="list__field">Ссылка</div>
-    </div>
-    <el-scrollbar>
-      <div class="list-item" v-for="entry in entries" :key="entry.id">
+    <div
+      class="grid sticky grid-cols-5 gap-y-2 px-2 max-h-[94%] overflow-y-scroll"
+    >
+      <div class="text-center col-span-2">Название</div>
+      <div class="text-center">Дата</div>
+      <div class="text-center">Статус</div>
+      <div class="text-center">Ссылка</div>
+      <div
+        v-if="entries"
+        class="grid grid-cols-5 col-span-5 dark:odd:bg-neutral-800 odd:bg-neutral-200 py-1 px-2 rounded-lg"
+        v-for="entry in entries.data"
+      >
         <router-link
-          :to="{ name: 'entryUpdate', params: { slug: entry.slug } }"
-          class="list-item__field-long"
-          >{{ entry.title }}</router-link
+          :to="{ name: 'entryUpdate', params: { slug: entry.id } }"
+          class="col-span-2 my-auto hover:underline"
         >
-        <div class="list-item__field">
-          {{ dayjs(entry.publishedAt).format('DD.MM.YYYY') }}
+          {{ entry.title }}
+        </router-link>
+        <div class="text-center m-auto">
+          {{ dayjs(entry.publishedAt).format('DD.MM.YYYY ') }}
         </div>
-        <div class="list-item__field">
+        <div class="text-center m-auto">
           <el-checkbox
-            @change="handleDelete(entry.isDeleted, entry)"
+            @change="handleDelete(entry.id, entry.isDeleted)"
             v-model="entry.isDeleted"
-            label="Удален"
-            size="large" />
+            label="Скрыта"
+            size="large"
+          />
         </div>
-        <div class="list-item__field">
-          <a :href="`http://dev.infomania.ru/entry/${entry.slug}`">
-            <img
-              style="width: 30px; color: white"
-              src="/external-link.svg"
-              alt="" />
-          </a>
-        </div>
+        <a
+          class="text-center m-auto"
+          :href="`http://dev.infomania.ru/entry/${entry.slug}`"
+        >
+          <img
+            style="width: 30px; color: white"
+            src="/external-link.svg"
+            alt=""
+          />
+        </a>
       </div>
-    </el-scrollbar>
+    </div>
     <el-pagination
-      @current-change="fetchData"
-      class="pagination"
-      background
+      v-if="entries"
+      v-model:current-page="page"
+      :v-model:page-size="entries.meta.pageSize"
+      :total="entries.meta.total"
+      @current-change="handleNavigate"
+      class="flex justify-center my-6"
       layout="prev, pager, next"
-      :page-size="30"
-      :page-count="totalPage" />
+      background
+    />
   </div>
 </template>
 

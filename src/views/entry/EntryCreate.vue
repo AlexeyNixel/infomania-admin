@@ -39,6 +39,7 @@ const handleCreateData = async () => {
 
 <template>
   <div class="entry" v-if="entry">
+    {{ entry.fileId  }}
     <div class="image">
       <the-upload :current-image="preview" v-model="entry.fileId" />
     </div>
