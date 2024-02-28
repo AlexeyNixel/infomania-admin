@@ -4,6 +4,8 @@ html {
   --ck-editor-content-bg: #ffffff;
   --ck-editor-text-color: #333333;
   --ck-editor-border-color: #afafaf;
+
+  --transition-time: 0.3s;
 }
 
 html.dark {

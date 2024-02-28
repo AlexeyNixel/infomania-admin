@@ -103,6 +103,7 @@ onBeforeMount(async () => {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
+  transition: var(--transition-time) all !important;
 
   &__title {
     display: flex;
@@ -148,6 +149,7 @@ onBeforeMount(async () => {
   width: calc(85% - 5px);
   border-radius: 10px;
   margin-left: 5px;
+  transition: var(--transition-time) all !important;
 }
 
 :deep(.el-input__wrapper) {

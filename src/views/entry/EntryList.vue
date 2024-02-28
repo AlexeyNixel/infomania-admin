@@ -92,6 +92,7 @@ onMounted(async () => {
 <style scoped lang="scss">
 .header {
   background-color: var(--el-bg-color-overlay);
+  transition: var(--transition-time) all !important;
   border-radius: 10px;
   height: 8%;
   display: flex;
@@ -103,6 +104,7 @@ onMounted(async () => {
   background-color: var(--el-bg-color-overlay);
   border-radius: 10px;
   height: 100%;
+  transition: var(--transition-time) all !important;
 
   &__header {
     display: flex;
