@@ -4,7 +4,6 @@ import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useMenuStore } from '@/stores/menu';
 import draggable from 'vuedraggable';
-import type { AnyTypeAnnotation } from '@babel/types';
 
 const menuStore = useMenuStore();
 const route = useRoute();

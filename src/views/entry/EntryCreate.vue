@@ -39,7 +39,7 @@ const handleCreateData = async () => {
 
 <template>
   <div class="entry" v-if="entry">
-    {{ entry.fileId  }}
+    {{ entry.fileId }}
     <div class="image">
       <the-upload :current-image="preview" v-model="entry.fileId" />
     </div>
@@ -78,6 +78,9 @@ const handleCreateData = async () => {
     <div class="document">
       <the-upload-document />
     </div>
+    <div class="my-auto delete">
+      <el-checkbox v-model="entry.isDeleted" label="Удален" border />
+    </div>
     <div class="button">
       <el-button @click="handleCreateData">Создать</el-button>
     </div>
@@ -108,7 +111,7 @@ const handleCreateData = async () => {
   grid-template-areas:
     'image fields fields fields fields'
     'editor editor editor editor editor'
-    'department rubric date document document'
+    'department rubric date document delete'
     'button . . . .';
 }
 

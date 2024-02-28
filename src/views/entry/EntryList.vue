@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue';
 import dayjs from 'dayjs';
 import { useRoute, useRouter } from 'vue-router';
 import type { EntryResponseType } from '@/types/entry-model';
+import { Link } from '@element-plus/icons-vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -67,14 +68,11 @@ onMounted(async () => {
           />
         </div>
         <a
-          class="text-center m-auto"
+          class="flex justify-center items-center text-center text-3xl text-neutral-700 dark:text-white"
           :href="`http://dev.infomania.ru/entry/${entry.slug}`"
+          target="_blank"
         >
-          <img
-            style="width: 30px; color: white"
-            src="/external-link.svg"
-            alt=""
-          />
+          <el-icon><Link /></el-icon>
         </a>
       </div>
     </div>

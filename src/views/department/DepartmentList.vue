@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { useDepartmentStore } from '@/stores/department';
 import type { DepartmentResponseType } from '@/types/department-model';
+import { Link } from '@element-plus/icons-vue';
 
 const departmentStore = useDepartmentStore();
 const department = ref<DepartmentResponseType>();
@@ -52,14 +53,10 @@ onMounted(async () => {
           />
         </div>
         <a
-          class="text-center m-auto"
-          :href="`http://dev.infomania.ru/entry/search/${item.id}`"
+          class="flex justify-center items-center my-[5px] text-center text-3xl text-neutral-700 dark:text-white"
+          :href="`http://dev.infomania.ru/search?department=${item.slug}`"
         >
-          <img
-            style="width: 30px; color: white"
-            src="/external-link.svg"
-            alt=""
-          />
+          <el-icon class="m-auto"><Link /></el-icon>
         </a>
       </div>
     </div>

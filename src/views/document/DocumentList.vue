@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Link } from '@element-plus/icons-vue';
 import dayjs from 'dayjs';
 import { useRoute, useRouter } from 'vue-router';
 import { useDocumentStore } from '@/stores/document';
@@ -26,8 +27,9 @@ const fetchData = async () => {
     isDeleted: true,
     page: page.value,
     orderBy: '-createdAt',
+    include: 'menuItem',
   });
-  s;
+  console.log(documents.value);
 };
 
 onMounted(() => {
@@ -66,16 +68,18 @@ onMounted(() => {
             size="large"
           />
         </div>
-        <a
-          class="text-center m-auto"
-          :href="`http://dev.infomania.ru/document/${item.id}`"
-        >
-          <img
-            style="width: 30px; color: white"
-            src="/external-link.svg"
-            alt=""
-          />
-        </a>
+        <div v-if="item.menuItem">
+          <a
+            class="flex justify-center items-center my-[5px] text-center text-3xl text-neutral-700 dark:text-white"
+            :href="
+              item.menuItem?.link
+                ? item.menuItem?.link
+                : `http://dev.infomania.ru/document/${item.menuItem?.slug}`
+            "
+          >
+            <el-icon class="m-auto"><Link /></el-icon>
+          </a>
+        </div>
       </div>
     </div>
     <el-pagination

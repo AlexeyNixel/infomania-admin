@@ -36,7 +36,7 @@ const handleUpdateData = async () => {
     message: 'Новость обновлена',
     type: 'success',
   });
-  await router.push({ name: 'entries' }); 
+  await router.push({ name: 'entries' });
 };
 
 onMounted(async () => {
@@ -93,6 +93,9 @@ onMounted(async () => {
     <div class="document">
       <the-upload-document />
     </div>
+    <div class="my-auto delete">
+      <el-checkbox v-model="entry.isDeleted" label="Удален" border />
+    </div>
     <div class="button">
       <el-button @click="handleUpdateData">Обновить</el-button>
     </div>
@@ -123,7 +126,7 @@ onMounted(async () => {
   grid-template-areas:
     'image fields fields fields fields'
     'editor editor editor editor editor'
-    'department rubric date document document'
+    'department rubric date document delete'
     'button . . . .';
 }
 
