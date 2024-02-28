@@ -14,4 +14,9 @@ export const menuRoute = [
     name: 'menuItemUpdate',
     component: () => import('../views/menu/MenuItemUpdate.vue'),
   },
+  {
+    path: '/menu-item/create/',
+    name: 'menuItemCreate',
+    component: () => import('../views/menu/MenuItemCreate.vue'),
+  },
 ];

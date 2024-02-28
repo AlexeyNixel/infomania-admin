@@ -46,9 +46,9 @@ export const postMenuItem = async (data: any) => {
 };
 
 export const putMenuItem = async (id: string, data: any) => {
-  return await axiosApi.put(`${MENU_ITEM_ROUTE}${id}`, data);
+  return await axiosApi.patch(`${MENU_ITEM_ROUTE}${id}`, data);
 };
 
 export const putMenu = async (id: string, data: any) => {
-  return await axiosApi.put(`${MENU_ROUTE}${id}`, data);
+  return await axiosApi.patch(`${MENU_ROUTE}${id}`, data);
 };

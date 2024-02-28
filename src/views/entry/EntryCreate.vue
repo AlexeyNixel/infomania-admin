@@ -2,7 +2,7 @@
 import { useEntryStore } from '@/stores/entry';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
+import { ElMessage, dayjs } from 'element-plus';
 import TheEditor from '@/components/ui/TheEditor.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
 import TheUpload from '@/components/ui/TheUpload.vue';
@@ -25,7 +25,10 @@ const entry = reactive<any>({
 });
 
 const handleCreateData = async () => {
-  entry.content = entry.content.replaceAll(/'|«|»/g, '"');
+  entry.publishedAt = dayjs(entry.publishedAt).format(
+    'YYYY-MM-DDTHH:mm:ss.SSS+00:00'
+  );
+
   await entryStore.createEntry(entry);
   ElMessage({
     message: 'Новость создана',
@@ -37,6 +40,7 @@ const handleCreateData = async () => {
 
 <template>
   <div class="entry" v-if="entry">
+    {{ entry.fileId }}
     <div class="image">
       <the-upload :current-image="preview" v-model="entry.fileId" />
     </div>
@@ -53,12 +57,10 @@ const handleCreateData = async () => {
         <span>Слаг</span>
         <el-input v-model="entry.slug" />
       </div>
-      <div class="disabled">
-        <el-checkbox
-          v-model="entry.pinned"
-          label="Главная новость"
-          size="large"
-        />
+
+      <div class="pinned">
+        <el-checkbox label="Закрепить" v-model="entry.pinned" />
+
       </div>
     </div>
     <div class="editor">
@@ -74,15 +76,16 @@ const handleCreateData = async () => {
     </div>
     <div class="date">
       <div>Дата</div>
-      <VueDatePicker
-        class="rounded-[10px]"
-        v-model="entry.publishedAt"
-        locale="ru"
-        format="dd/MM/yyyy HH:mm"
-      />
+
+      <el-date-picker v-model="entry.publishedAt" />
+
     </div>
     <div class="document">
       <the-upload-document />
+    </div>
+
+    <div class="my-auto delete">
+      <el-checkbox v-model="entry.isDeleted" label="Удален" border />
     </div>
 
     <div class="button">
@@ -104,7 +107,7 @@ const handleCreateData = async () => {
   margin: 0;
   background-color: var(--el-bg-color-overlay);
   border-radius: 10px;
-  height: calc(100% - 20px);
+  height: calc(100%);
   padding: 10px 10px;
 
   display: grid;
@@ -115,8 +118,10 @@ const handleCreateData = async () => {
   grid-template-areas:
     'image fields fields fields fields'
     'editor editor editor editor editor'
-    'department rubric date document disabled'
-    'button . . . . ';
+
+    'department rubric date document delete'
+    'button . . . .';
+
 }
 
 .editor {

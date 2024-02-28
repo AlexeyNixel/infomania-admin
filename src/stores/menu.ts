@@ -4,6 +4,7 @@ import {
   findMenuItems,
   findMenuItem,
   putMenu,
+  postMenuItem,
 } from './../api/menu';
 import type { ParamsType } from '@/types/models';
 import { findMenus } from '@/api/menu';
@@ -38,6 +39,10 @@ export const useMenuStore = defineStore('menu', () => {
     return await putMenu(id, data);
   };
 
+  const createMenuItem = async (data: any) => {
+    return await postMenuItem(data);
+  };
+
   return {
     getMenu,
     getMenus,
@@ -45,5 +50,6 @@ export const useMenuStore = defineStore('menu', () => {
     getMenuItem,
     updateMenuItem,
     updateMenu,
+    createMenuItem,
   };
 });

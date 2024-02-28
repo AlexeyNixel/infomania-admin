@@ -1,38 +1,30 @@
 <script setup lang="ts">
-import { Link } from '@element-plus/icons-vue';
 import dayjs from 'dayjs';
 import { useRoute, useRouter } from 'vue-router';
-import { useDocumentStore } from '@/stores/document';
 import { onMounted, ref } from 'vue';
+import type { DepartmentType } from '@/types/models';
+import { useBookStore } from '@/stores/book';
 
-const documentStore = useDocumentStore();
-const documents = ref<any>();
-
+const bookStore = useBookStore();
 const route = useRoute();
 const router = useRouter();
-const page = ref<number>(Number(route.query.page) || 1);
 
-const handleDelete = async (id: string, status: boolean) => {
-  await documentStore.updateDocument(id, { isDeleted: status });
-};
+const page = ref<number>(Number(route.query.page) || 1);
+const book = ref<any>();
 
 const handleNavigate = async () => {
-  router.push({ name: 'documents', query: { page: page.value } });
+  router.push({ name: 'book', query: { page: page.value } });
   fetchData();
 };
 
 const fetchData = async () => {
-  documents.value = await documentStore.getDocuments({
-    pageSize: 30,
-    isDeleted: true,
+  book.value = await bookStore.getBooks({
     page: page.value,
-    orderBy: '-createdAt',
-    include: 'menuItem',
+    pageSize: 30,
   });
-  console.log(documents.value);
 };
 
-onMounted(() => {
+onMounted(async () => {
   fetchData();
 });
 </script>
@@ -40,6 +32,7 @@ onMounted(() => {
 <template>
   <div class="list">
     <div
+      v-if="book"
       class="grid sticky grid-cols-5 gap-y-2 px-2 max-h-[94%] overflow-y-scroll"
     >
       <div class="text-center col-span-2">Название</div>
@@ -47,9 +40,8 @@ onMounted(() => {
       <div class="text-center">Статус</div>
       <div class="text-center">Ссылка</div>
       <div
-        v-if="documents"
         class="grid grid-cols-5 col-span-5 dark:odd:bg-neutral-800 odd:bg-neutral-200 py-1 px-2 rounded-lg"
-        v-for="item in documents.data"
+        v-for="item in book.data"
       >
         <router-link
           :to="{ name: 'documentUpdate', params: { slug: item.id } }"
@@ -58,7 +50,7 @@ onMounted(() => {
           {{ item.title }}
         </router-link>
         <div class="text-center m-auto">
-          {{ dayjs(item.publishedAt).format('DD.MM.YYYY ') }}
+          {{ dayjs(new Date()).format('DD.MM.YYYY ') }}
         </div>
         <div class="text-center m-auto">
           <el-checkbox
@@ -68,25 +60,23 @@ onMounted(() => {
             size="large"
           />
         </div>
-        <div v-if="item.menuItem">
-          <a
-            class="flex justify-center items-center my-[5px] text-center text-3xl text-neutral-700 dark:text-white"
-            :href="
-              item.menuItem?.link
-                ? item.menuItem?.link
-                : `http://dev.infomania.ru/document/${item.menuItem?.slug}`
-            "
-          >
-            <el-icon class="m-auto"><Link /></el-icon>
-          </a>
-        </div>
+        <a
+          class="text-center m-auto"
+          :href="`http://dev.infomania.ru/document/${item.id}`"
+        >
+          <img
+            style="width: 30px; color: white"
+            src="/external-link.svg"
+            alt=""
+          />
+        </a>
       </div>
     </div>
     <el-pagination
-      v-if="documents"
+      v-if="book"
       v-model:current-page="page"
-      v-model:page-size="documents.meta.pageSize"
-      v-model:total="documents.meta.total"
+      :page-size="Number(book.meta.pageSize)"
+      :total="book.meta.total"
       @current-change="handleNavigate"
       class="flex justify-center my-6"
       layout="prev, pager, next"

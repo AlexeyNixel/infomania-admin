@@ -32,7 +32,12 @@ const buttons = [
   {
     title: 'Меню',
     list: 'menu',
-    create: 'slidesCreate',
+    create: 'menuItemCreate',
+  },
+  {
+    title: 'Книги',
+    list: 'book',
+    create: 'bookCreate',
   },
   {
     title: 'Афиша',
@@ -53,7 +58,7 @@ const { username } = storeToRefs(adminStore);
 onBeforeMount(async () => {
   adminStore.token = localStorage.getItem('token') || '';
   adminStore.username = localStorage.getItem('username') || '';
-  await entryStore.createEntry({});
+  await entryStore.updateEntry('', {});
 });
 </script>
 

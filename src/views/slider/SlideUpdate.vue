@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
 import { useSliderStore } from '@/stores/slider';
 import { onMounted, reactive, ref } from 'vue';
@@ -11,7 +11,7 @@ const preview = ref<string>();
 const route = useRoute();
 const router = useRouter();
 const sliderStore = useSliderStore();
-const content = ref()
+const content = ref();
 const slide = reactive<any>({
   title: '',
   url: '',
@@ -27,7 +27,7 @@ const handleUpdateSlide = async () => {
     message: 'Слайд обновлен',
     type: 'success',
   });
-  await router.push({name:'slides'})
+  await router.push({ name: 'slides' });
 };
 
 onMounted(async () => {
@@ -43,44 +43,44 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class='container'>
-    <div class='slider-update'>
-      <div class='slider-update__string'>
-        <div class='slider-update__item'>
+  <div class="slider">
+    <div class="slider-update">
+      <div class="slider-update__string">
+        <div class="slider-update__item">
           <span>Название</span>
-          <el-input v-model='slide.title' />
+          <el-input v-model="slide.title" />
         </div>
-        <div class='slider-update__item'>
+        <div class="slider-update__item">
           <span>Ссылка</span>
-          <el-input v-model='slide.url' />
+          <el-input v-model="slide.url" />
         </div>
-        <div class='slider-update__item'>
+        <div class="slider-update__item">
           <span>Описание</span>
-          <el-input v-model='slide.desc' />
+          <el-input v-model="slide.desc" />
         </div>
-        <div class='slider-update__item'>
+        <div class="slider-update__item">
           <div>Новость</div>
-          <the-select  entry-order='entry' v-model='slide.entryId'/>
+          <the-select entry-order="entry" v-model="slide.entryId" />
         </div>
-        <div class='slider-update__item' style='width: 10%'>
+        <div class="slider-update__item" style="width: 10%">
           <div>Удален</div>
-          <el-switch v-model='slide.isDeleted'/>
+          <el-switch v-model="slide.isDeleted" />
         </div>
       </div>
       <the-upload-slide
-        class='slider-update__upload'
-        :current-image='preview'
-        v-model='slide.fileId'
+        class="slider-update__upload"
+        :current-image="preview"
+        v-model="slide.fileId"
       />
     </div>
-    <div class='slider-update__btn'>
-      <el-button @click='handleUpdateSlide()'>Обновить</el-button>
+    <div class="slider-update__btn">
+      <el-button @click="handleUpdateSlide()">Обновить</el-button>
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
-.container {
+<style scoped lang="scss">
+.slider {
   background-color: var(--el-bg-color-overlay);
   height: calc(100% - 20px);
   border-radius: 10px;
@@ -101,6 +101,5 @@ onMounted(async () => {
   &__upload {
     margin: 10px 0;
   }
-
 }
 </style>

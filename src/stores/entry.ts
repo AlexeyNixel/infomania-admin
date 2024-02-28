@@ -1,12 +1,14 @@
-import { findEntries, findEntry, postEntry, putEntry } from '@/api/entry';
+import { findEntries, findEntry, postEntry, patchEntry } from '@/api/entry';
 import type { EntryType, ParamsType } from '@/types/models';
 import { defineStore } from 'pinia';
 import { ElMessage } from 'element-plus';
+import type { EntryQuery, EntryResponseType } from '@/types/entry-model';
 
 export const useEntryStore = defineStore('entry', () => {
-  const getEntries = async (params?: ParamsType) => {
-    const { data } = await findEntries(params);
-    return data;
+  const getEntries = async (
+    params?: EntryQuery
+  ): Promise<EntryResponseType> => {
+    return await findEntries(params);
   };
 
   const getEntry = async (slug: string, params?: ParamsType) => {
@@ -15,7 +17,7 @@ export const useEntryStore = defineStore('entry', () => {
   };
 
   const updateEntry = async (slug: string, entry: any) => {
-    await putEntry(slug, entry);
+    await patchEntry(slug, entry);
   };
 
   const createEntry = async (entry: any) => {

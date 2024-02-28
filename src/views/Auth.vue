@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { onBeforeMount, ref } from 'vue';
 import { auth } from '@/api/admin';
 import { useAdminStore } from '@/stores/admin';
@@ -8,6 +8,7 @@ import { axiosApi } from '@/api/axios';
 const router = useRouter();
 const status = ref<any>();
 const adminStore = useAdminStore();
+const isErrorLogin = ref<boolean>(false);
 
 const user = ref({
   username: '',
@@ -16,39 +17,47 @@ const user = ref({
 
 const handleAuth = async () => {
   status.value = await auth(user.value);
+
   if (status.value.data) {
-    adminStore.token = status.value.data.access_token
-    adminStore.username = status.value.data.username
+    adminStore.token = status.value.data.access_token;
+    adminStore.username = status.value.data.username;
     localStorage.setItem('token', adminStore.token);
     localStorage.setItem('username', adminStore.username);
-    axiosApi.defaults.headers.common['Authorization'] = `Bearer ${adminStore.token}`;
+    axiosApi.defaults.headers.common[
+      'Authorization'
+    ] = `Bearer ${adminStore.token}`;
     await router.push({ name: 'index' });
+  } else if (status.value.request.status === 401) {
+    isErrorLogin.value = !isErrorLogin.value;
   }
 };
 
-onBeforeMount(async () => {
-
-})
+onBeforeMount(async () => {});
 </script>
 
 <template>
-  <div class='wrapper'>
-    <el-form class='login-form' @keydown.enter='handleAuth()'>
-      <div class='login-form__title'>Авторизация</div>
-      <div class='login-form__field'>
+  <div class="wrapper">
+    <el-form class="login-form" @keydown.enter="handleAuth()">
+      <div class="login-form__title">Авторизация</div>
+      <transition>
+        <div v-if="isErrorLogin" class="text-sm text-red-600 text-center my-2">
+          Неправильный логин или пароль
+        </div>
+      </transition>
+      <div class="login-form__field my-2">
         <span>Логин</span>
-        <el-input v-model='user.username' />
+        <el-input v-model="user.username" />
       </div>
-      <div class='login-form__field'>
+      <div class="login-form__field my-2">
         <span>Пароль</span>
-        <el-input type='password' show-password v-model='user.password' />
+        <el-input type="password" show-password v-model="user.password" />
       </div>
-      <el-button @click='handleAuth()'>Войти</el-button>
+      <el-button @click="handleAuth()">Войти</el-button>
     </el-form>
   </div>
 </template>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .wrapper {
   width: 100%;
   height: 100%;
@@ -71,7 +80,6 @@ onBeforeMount(async () => {
   }
 
   &__field {
-    margin: 30px 0;
   }
 }
 </style>
