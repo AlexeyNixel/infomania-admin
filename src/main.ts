@@ -12,10 +12,15 @@ import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import 'element-plus/theme-chalk/dark/css-vars.css';
 
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 // @ts-ignore
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import '@/assets/ckeditorStyle.css';
 const app = createApp(App);
+
+app.component('VueDatePicker', VueDatePicker);
 
 app.use(CKEditor);
 app.use(createPinia());

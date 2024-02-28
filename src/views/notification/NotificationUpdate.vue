@@ -2,6 +2,7 @@
 import { useNotificationStore } from '@/stores/notification';
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import TheSelect from '@/components/ui/TheSelect.vue';
 
 const route = useRoute();
 const slug = ref<string>(route.params.id as string);
@@ -12,6 +13,7 @@ const notification: any = reactive({
   startTime: '',
   endTime: '',
   type: '',
+  entryId: '',
 });
 
 onMounted(async () => {
@@ -57,6 +59,13 @@ const handleUpdate = async () => {
           <el-option label="Предупреждение" value="warning" />
           <el-option label="Ошибка" value="error" />
         </el-select>
+      </div>
+      <div class="my-2">
+        <div>Новость</div>
+        <the-select
+          entry-order="entry"
+          v-model="notification.entryId"
+        ></the-select>
       </div>
       <el-button @click="handleUpdate()">Обновить</el-button>
     </div>

@@ -3,18 +3,18 @@
     <ckeditor
       class="editor"
       :editor="editor"
-      :config="editorConfig"
       :model-value="modelValue"
+      :config="editorConfig"
       @update:model-value="handleChangeValue"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
+// import '@/plugins/ckeditor/ckeditor.js';
 import '@/plugins/ckeditor/ckeditor.js';
 import { uploadAdapter } from '@/utils/uploadAdapter';
 import { ref } from 'vue';
-
 type PropsType = {
   modelValue?: string;
   field?: string;
@@ -72,7 +72,6 @@ const editor = ClassicEditor;
 defineProps<PropsType>();
 
 const emit = defineEmits(['update:modelValue']);
-//@ts-ignore
 
 const handleChangeValue = (value: string) => {
   emit('update:modelValue', value);
