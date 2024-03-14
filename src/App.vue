@@ -58,7 +58,7 @@ const { username } = storeToRefs(adminStore);
 onBeforeMount(async () => {
   adminStore.token = localStorage.getItem('token') || '';
   adminStore.username = localStorage.getItem('username') || '';
-  await entryStore.updateEntry('', {});
+  await entryStore.updateEntry('123', {});
 });
 </script>
 

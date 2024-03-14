@@ -44,7 +44,7 @@ onMounted(async () => {
         v-for="item in book.data"
       >
         <router-link
-          :to="{ name: 'documentUpdate', params: { slug: item.id } }"
+          :to="{ name: 'bookUpdate', params: { slug: item.id } }"
           class="col-span-2 my-auto hover:underline"
         >
           {{ item.title }}
@@ -52,14 +52,14 @@ onMounted(async () => {
         <div class="text-center m-auto">
           {{ dayjs(new Date()).format('DD.MM.YYYY ') }}
         </div>
-        <div class="text-center m-auto">
+        <!-- <div class="text-center m-auto">
           <el-checkbox
             @change="handleDelete(item.id, item.isDeleted)"
             v-model="item.isDeleted"
             label="Скрыта"
             size="large"
           />
-        </div>
+        </div> -->
         <a
           class="text-center m-auto"
           :href="`http://dev.infomania.ru/document/${item.id}`"

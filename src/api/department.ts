@@ -14,7 +14,7 @@ export const findDepartment = async (slug: string, params?: ParamsType) => {
 };
 
 export const putDepartment = async (slug: string, data: object) => {
-  return await axiosApi.put(`${DEPARTMENT_ROUTE}${slug}`, data);
+  return await axiosApi.patch(`${DEPARTMENT_ROUTE}${slug}`, data);
 };
 
 export const postDepartment = async (data: any) => {

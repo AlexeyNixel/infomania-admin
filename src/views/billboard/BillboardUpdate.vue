@@ -29,7 +29,7 @@ const handleUpdateDate = async () => {
     type: 'success',
   });
   await router.push({ name: 'billboard' });
-  return await billboardStore.updateBillboard(slug.value, billboard);
+  return billboardStore.updateBillboard(slug.value, billboard);
 };
 
 onMounted(async () => {

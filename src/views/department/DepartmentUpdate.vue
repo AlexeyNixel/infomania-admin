@@ -1,9 +1,8 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useDepartmentStore } from '@/stores/department';
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import TheUpload from '@/components/ui/TheUpload.vue';
-import { Delete } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus';
 
 const route = useRoute();
@@ -19,19 +18,25 @@ const department = reactive<any>({
 });
 
 const handleUpdate = async () => {
-  await departmentStore.updateDepartment(route.params.slug as string, department);
+  await departmentStore.updateDepartment(
+    route.params.slug as string,
+    department
+  );
   ElMessage({
     message: 'Отдел обновлен',
     type: 'success',
   });
-  await router.push({name:'department'})
+  await router.push({ name: 'department' });
 };
 
 onMounted(async () => {
-  const { data } = await departmentStore.getDepartment(route.params.slug as string, {
-    include: 'preview',
-    isDeleted:true
-  });
+  const { data } = await departmentStore.getDepartment(
+    route.params.slug as string,
+    {
+      include: 'preview',
+      isDeleted: true,
+    }
+  );
   preview.value = data.preview?.path;
   Object.keys(department).forEach((key) => {
     department[key] = data[key];
@@ -40,36 +45,32 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class='container'>
-    <div class='department-update'>
-      <div class='department-update__preview'>
-        <the-upload :current-image='preview' v-model='department.fileId'/>
+  <div class="container">
+    <div class="department-update">
+      <div class="department-update__preview">
+        <the-upload :current-image="preview" v-model="department.fileId" />
       </div>
-      <div class='department-update__text'>
-        <div class='department-update__item'>
+      <div class="department-update__text">
+        <div class="department-update__item">
           <span>Название</span>
-          <el-input v-model='department.title' />
+          <el-input v-model="department.title" />
         </div>
-        <div class='department-update__item'>
+        <div class="department-update__item">
           <span>Слаг</span>
-          <el-input v-model='department.slug' />
+          <el-input v-model="department.slug" />
         </div>
-        <div class='department-update__item'>
-          <el-switch
-            v-model='department.isDeleted'
-            :active-action-icon="Delete"
-            size="large"
-          />
+        <div class="department-update__item">
+          <el-checkbox label="Удален" v-model="department.isDeleted" border />
         </div>
-        <div class='department-update__btn'>
-          <el-button @click='handleUpdate'>Обновить</el-button>
+        <div class="department-update__btn">
+          <el-button @click="handleUpdate">Обновить</el-button>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .container {
   display: flex;
   align-items: center;
@@ -83,5 +84,12 @@ onMounted(async () => {
   &__item {
     margin: 20px 0;
   }
+}
+:deep(.el-checkbox.is-bordered) {
+  border-radius: 10px;
+}
+
+:deep(.el-button) {
+  border-radius: 10px;
 }
 </style>

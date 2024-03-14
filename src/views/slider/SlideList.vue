@@ -63,7 +63,7 @@ onMounted(async () => {
           class="grid grid-cols-5 col-span-5 dark:odd:bg-neutral-800 odd:bg-neutral-200 py-1 px-2 rounded-lg"
         >
           <router-link
-            :to="{ name: 'documentUpdate', params: { slug: item.id } }"
+            :to="{ name: 'slidesUpdate', params: { slug: item.id } }"
             class="col-span-2 my-auto hover:underline"
           >
             {{ item.title }}

@@ -30,12 +30,15 @@ const handleCreate = async () => {
     <div class="document-update__item">
       <the-editor v-model="document.content" />
     </div>
-    <div class="document-update__item">
-      <the-select entry-order="menu-item" v-model="document.menuItemId" />
-    </div>
-    <div class="document-update__item">
-      <div class="document">
-        <the-upload-document />
+    <div class="flex">
+      <div class="document-update__item">
+        <div>Меню</div>
+        <the-select entry-order="menu-item" v-model="document.menuItemId" />
+      </div>
+      <div class="document-update__item">
+        <div class="document">
+          <the-upload-document />
+        </div>
       </div>
     </div>
     <div class="document-update__item">
@@ -53,5 +56,9 @@ const handleCreate = async () => {
   &__item {
     padding: 20px;
   }
+}
+
+:deep(.el-button) {
+  border-radius: 10px;
 }
 </style>

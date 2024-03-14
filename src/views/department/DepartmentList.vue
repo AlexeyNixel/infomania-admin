@@ -36,7 +36,7 @@ onMounted(async () => {
         v-for="item in department.data"
       >
         <router-link
-          :to="{ name: 'documentUpdate', params: { slug: item.id } }"
+          :to="{ name: 'departmentUpdate', params: { slug: item.id } }"
           class="col-span-2 my-auto hover:underline"
         >
           {{ item.title }}

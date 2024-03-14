@@ -36,6 +36,7 @@ onMounted(async () => {
   } else {
     const { data } = await adminStore.getAllModel(`api/${props.entryOrder}/`, {
       isDeleted: true,
+      pageSize: 30,
     });
     content.value = data;
   }
@@ -43,19 +44,25 @@ onMounted(async () => {
 </script>
 
 <template>
-  <el-select v-if="props?.entryOrder === 'rubric'" multiple>
+  <el-select
+    v-if="props?.entryOrder === 'rubric'"
+    multiple
+    placeholder="Выбрать"
+  >
     <el-option
       v-for="item in content"
       :key="item.id"
       :label="item.title"
-      :value="item.id" />
+      :value="item.id"
+    />
   </el-select>
-  <el-select v-else>
+  <el-select v-else placeholder="Выбрать">
     <el-option
       v-for="item in content"
       :key="item.id"
       :label="item.title"
-      :value="item.id" />
+      :value="item.id"
+    />
   </el-select>
 </template>
 

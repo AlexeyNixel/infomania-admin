@@ -12,7 +12,7 @@ const sliderStore = useSliderStore();
 const slide = reactive<any>({
   title: '',
   url: '',
-  desc: '',
+  desc: '0',
   fileId: '',
   entryId: '',
   isDeleted: false,
@@ -32,6 +32,13 @@ const handleCreateSlide = async () => {
 
 <template>
   <div class="slide">
+    <div class="upload">
+      <the-upload-slide
+        class="slider-update__upload"
+        :current-image="preview"
+        v-model="slide.fileId"
+      />
+    </div>
     <div class="title">
       <div class="slider-update__item">
         <span>Название</span>
@@ -44,33 +51,21 @@ const handleCreateSlide = async () => {
         <el-input v-model="slide.url" />
       </div>
     </div>
-    <div class="desc">
-      <div class="slider-update__item">
-        <span>Описание</span>
-        <el-input v-model="slide.desc" />
-      </div>
-    </div>
     <div class="entry">
       <div class="slider-update__item">
         <div>Новость</div>
         <the-select entry-order="entry" v-model="slide.entryId" />
       </div>
     </div>
-    <div class="delete">
-      <div class="slider-update__item" style="width: 10%">
-        <div>Удален</div>
-        <el-switch v-model="slide.isDeleted" />
+    <div class="my-auto delete">
+      <div class="slider-update__item">
+        <el-checkbox v-model="slide.isDeleted" label="Удален" border />
       </div>
     </div>
-    <div class="preview">
-      <the-upload-slide
-        class="slider-update__upload"
-        :current-image="preview"
-        v-model="slide.fileId"
-      />
-    </div>
-    <div class="slider-update__btn">
-      <el-button @click="handleCreateSlide">Создать</el-button>
+    <div class="btn">
+      <div class="button slider-update__btn">
+        <el-button @click="handleCreateSlide">Создать</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -84,15 +79,19 @@ const handleCreateSlide = async () => {
   width: 100%;
   padding: 10px 10px;
 
-  gap: 5px 5px;
-
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 0.1fr 1.9fr;
+  gap: 10px 10px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 0.5fr 0.1fr 0.1fr;
   grid-auto-flow: row;
   grid-template-areas:
-    'title link desc entry delete'
-    'preview preview preview preview preview';
+    'upload upload upload upload'
+    'title link entry delete'
+    'btn . . .';
+}
+
+.upload {
+  grid-area: upload;
 }
 
 .title {
@@ -103,10 +102,6 @@ const handleCreateSlide = async () => {
   grid-area: link;
 }
 
-.desc {
-  grid-area: desc;
-}
-
 .entry {
   grid-area: entry;
 }
@@ -115,23 +110,7 @@ const handleCreateSlide = async () => {
   grid-area: delete;
 }
 
-.preview {
-  grid-area: preview;
-}
-
-.slider-update {
-  &__string {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  &__item {
-    width: 100%;
-    margin: 0 5px;
-  }
-
-  &__upload {
-    margin: 10px 0;
-  }
+.btn {
+  grid-area: btn;
 }
 </style>

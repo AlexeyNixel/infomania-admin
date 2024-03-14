@@ -22,6 +22,9 @@ const billboard = reactive<any>({
 });
 
 const handleCreateDate = async () => {
+  Object.keys(billboard).forEach((item) => {
+    if (!billboard[item]) delete billboard[item];
+  });
   ElMessage({
     message: 'Афиша создана',
     type: 'success',

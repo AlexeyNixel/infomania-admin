@@ -34,7 +34,7 @@ export const useEntryStore = defineStore('entry', () => {
       type: 'success',
     });
 
-    return await putEntry(entry.id, {
+    return await patchEntry(entry.id, {
       isDeleted: status,
       rubrics: rubrics,
     });

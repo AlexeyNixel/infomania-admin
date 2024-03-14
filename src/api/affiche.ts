@@ -9,12 +9,15 @@ export const findAffiches = async (params?: ParamsType) => {
   return await axiosApi.get(AFFICHE_ROUTE, { params });
 };
 
-export const findAffiche = async (slug: string, params?: ParamsType): Promise<BillboardType> => {
+export const findAffiche = async (
+  slug: string,
+  params?: ParamsType
+): Promise<BillboardType> => {
   return await axiosApi.get(`${AFFICHE_ROUTE}${slug}`, { params });
 };
 
 export const putAffiche = async (slug: string, data: any) => {
-  return await axiosApi.put(`${AFFICHE_ROUTE}${slug}`, data);
+  return await axiosApi.patch(`${AFFICHE_ROUTE}${slug}`, data);
 };
 
 export const postAffiche = async (data: any) => {

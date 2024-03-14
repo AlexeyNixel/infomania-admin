@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Plus } from '@element-plus/icons-vue';
+import { Picture } from '@element-plus/icons-vue';
 import { ref, watch } from 'vue';
 import type { UploadProps } from 'element-plus';
 
@@ -36,7 +36,7 @@ watch(props, () => {
 
 <template>
   <el-upload
-    class="entry-create__top-preview"
+    class="entry-create__top-preview ring-1 ring-neutral-300 dark:ring-neutral-600 rounded-[10px] flex items-center justify-center mr-2"
     :action="uploadUrl"
     accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
     :show-file-list="false"
@@ -45,9 +45,15 @@ watch(props, () => {
     :model-value="modelValue"
     @update:model-value="handleChangeValue"
   >
-    <img v-if="preview" :src="`${staticUrl}${preview}`" class="avatar" alt="" />
-    <el-icon v-else class="avatar-uploader-icon">
-      <Plus />
+    <img
+      v-if="preview"
+      :src="`${staticUrl}${preview}`"
+      class="avatar rounded-[10px]"
+      alt=""
+    />
+    <el-icon v-else class="avatar-uploader-icon flex flex-col">
+      <Picture />
+      <div class="text-base">загрузить изображение</div>
     </el-icon>
   </el-upload>
 </template>
@@ -85,6 +91,10 @@ watch(props, () => {
   width: 100%;
   height: 100%;
   text-align: center;
+  border-radius: 10px;
+  &:hover {
+    @apply bg-neutral-300 dark:bg-neutral-600 transition-all;
+  }
 }
 :deep(.el-upload el-upload--text img) {
   width: 100%;

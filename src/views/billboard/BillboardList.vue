@@ -31,6 +31,7 @@ const fetchData = async () => {
     page: page.value,
     pageSize: 30,
     orderBy: '-eventDate',
+    isDeleted: true,
   });
 };
 
@@ -54,7 +55,7 @@ onMounted(async () => {
         v-for="item in billboards.data"
       >
         <router-link
-          :to="{ name: 'documentUpdate', params: { slug: item.id } }"
+          :to="{ name: 'billboardUpdate', params: { slug: item.id } }"
           class="col-span-2 my-auto hover:underline"
         >
           {{ item.title }}

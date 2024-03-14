@@ -57,11 +57,6 @@ const handleCreateData = async () => {
         <span>Слаг</span>
         <el-input v-model="entry.slug" />
       </div>
-
-      <div class="pinned">
-        <el-checkbox label="Закрепить" v-model="entry.pinned" />
-
-      </div>
     </div>
     <div class="editor">
       <TheEditor v-model="entry.content" />
@@ -76,18 +71,17 @@ const handleCreateData = async () => {
     </div>
     <div class="date">
       <div>Дата</div>
-
       <el-date-picker v-model="entry.publishedAt" />
-
     </div>
     <div class="document">
       <the-upload-document />
     </div>
-
     <div class="my-auto delete">
       <el-checkbox v-model="entry.isDeleted" label="Удален" border />
     </div>
-
+    <div class="my-auto pinned">
+      <el-checkbox label="Закрепить" v-model="entry.pinned" border />
+    </div>
     <div class="button">
       <el-button @click="handleCreateData">Создать</el-button>
     </div>
@@ -111,17 +105,15 @@ const handleCreateData = async () => {
   padding: 10px 10px;
 
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr 1fr 1fr 1fr;
+  grid-template-columns: 0.9fr 1.1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 2.6fr 0.2fr 0.2fr;
   gap: 5px 5px;
   grid-auto-flow: row dense;
   grid-template-areas:
-    'image fields fields fields fields'
-    'editor editor editor editor editor'
-
-    'department rubric date document delete'
-    'button . . . .';
-
+    'image fields fields fields fields fields'
+    'editor editor editor editor editor editor'
+    'department rubric date document delete pinned'
+    'button . . . . .';
 }
 
 .editor {
@@ -163,9 +155,9 @@ const handleCreateData = async () => {
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas:
-    'title title title'
-    'desc desc desc'
-    'slug slug slug';
+    'title title title title'
+    'desc desc desc desc'
+    'slug slug slug slug';
 
   grid-area: fields;
 }

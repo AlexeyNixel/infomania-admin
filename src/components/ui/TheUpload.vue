@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Plus } from '@element-plus/icons-vue';
+import { Picture } from '@element-plus/icons-vue';
 import { ref, watch } from 'vue';
 import type { UploadProps } from 'element-plus';
 import slugify from 'slugify';
@@ -50,7 +50,7 @@ watch(props, () => {
 
 <template>
   <el-upload
-    class="entry-create__top-preview"
+    class="entry-create__top-preview ring-1 ring-neutral-300 dark:ring-neutral-600 rounded-[10px] w-max h-max flex items-center justify-center mr-2"
     :action="uploadUrl"
     :data="{ filename: newName }"
     accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
@@ -59,10 +59,12 @@ watch(props, () => {
     :headers="headers"
     :model-value="modelValue"
     :before-upload="beforeAvatarUpload"
-    @update:model-value="handleChangeValue">
+    @update:model-value="handleChangeValue"
+  >
     <img v-if="preview" :src="`${staticUrl}${preview}`" class="avatar" alt="" />
-    <el-icon v-else class="avatar-uploader-icon">
-      <Plus />
+    <el-icon v-else class="flex flex-col avatar-uploader-icon">
+      <Picture />
+      <div class="text-base">загрузить изображение</div>
     </el-icon>
   </el-upload>
 </template>
@@ -95,8 +97,11 @@ watch(props, () => {
   width: 290px;
   height: 300px;
   border-radius: 10px;
-  margin-right: 20px;
+  // margin-right: 20px;
   text-align: center;
   background-color: var(--el-bg-color-overlay);
+  &:hover {
+    @apply bg-neutral-300 dark:bg-neutral-600 transition-all;
+  }
 }
 </style>
