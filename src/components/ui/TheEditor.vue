@@ -82,7 +82,7 @@ const handleChangeValue = (value: string) => {
 :deep(.ck.ck-editor__main > .ck-editor__editable) {
   background-color: var(--ck-editor-header-bg);
   border: 1px solid #4c4d4f;
-  height: 50vh;
+  height: 45vh;
   border-radius: 0 0 10px 10px;
 }
 

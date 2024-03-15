@@ -91,8 +91,8 @@ onBeforeMount(async () => {
 <style scoped lang="scss">
 .admin {
   display: flex;
-  width: calc(100vw - 10px);
-  height: calc(100vh - 10px);
+  width: calc(100vw);
+  height: calc(100vh);
   padding: 5px;
 }
 

@@ -2,16 +2,26 @@
 import { useEntryStore } from '@/stores/entry';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessage, dayjs } from 'element-plus';
+import { ElMessage, dayjs, FormInstance, FormRules } from 'element-plus';
 import TheEditor from '@/components/ui/TheEditor.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
 import TheUpload from '@/components/ui/TheUpload.vue';
 import TheUploadDocument from '@/components/ui/TheUploadDocument.vue';
 
-const router = useRouter();
-const entryStore = useEntryStore();
-const preview = ref();
-const entry = reactive<any>({
+interface RuleForm {
+  title: string;
+  desc: string;
+  slug: string;
+  fileId: string;
+  content: string;
+  isDeleted: boolean;
+  pinned: boolean;
+  rubrics: string[];
+  departmentId: string;
+  publishedAt: string;
+}
+
+const entry = reactive<RuleForm>({
   title: '',
   desc: '',
   slug: '',
@@ -19,82 +29,110 @@ const entry = reactive<any>({
   rubrics: [],
   fileId: '',
   departmentId: '',
-  publishedAt: new Date(),
+  publishedAt: new Date().toString(),
   isDeleted: false,
   pinned: false,
 });
 
-const handleCreateData = async () => {
-  entry.publishedAt = dayjs(entry.publishedAt).format(
-    'YYYY-MM-DDTHH:mm:ss.SSS+00:00'
-  );
+const rules = reactive<FormRules<RuleForm>>({
+  title: [{ required: true, message: 'Обязательное поле' }],
+  desc: [{ required: true, message: 'Обязательное поле' }],
+  slug: [{ required: true, message: 'Обязательное поле' }],
+  content: [{ required: true, message: 'Обязательное поле' }],
+  rubrics: [{ required: true, message: 'Обязательное поле' }],
+  fileId: [{ required: true, message: 'Обязательное поле' }],
+  departmentId: [{ required: true, message: 'Обязательное поле' }],
+  publishedAt: [{ required: true, message: 'Обязательное поле' }],
+  isDeleted: [{ required: true, message: 'Обязательное поле' }],
+  pinned: [{ required: true, message: 'Обязательное поле' }],
+});
 
-  await entryStore.createEntry(entry);
-  ElMessage({
-    message: 'Новость создана',
-    type: 'success',
+const ruleFormRef = ref<FormInstance>();
+const router = useRouter();
+const entryStore = useEntryStore();
+const preview = ref();
+
+const submitForm = async (form: FormInstance | undefined) => {
+  if (!form) return;
+
+  await form.validate((valid, fields) => {
+    if (valid) {
+      console.log(entry);
+      entry.publishedAt = dayjs(entry.publishedAt).format(
+        'YYYY-MM-DDTHH:mm:ss.SSS+00:00'
+      );
+      entryStore.createEntry(entry);
+      ElMessage({
+        message: 'Новость создана',
+        type: 'success',
+      });
+    } else {
+      console.log('false');
+    }
   });
-  await router.push({ name: 'entries' });
 };
 </script>
 
 <template>
-  <div class="entry" v-if="entry">
-    {{ entry.fileId }}
-    <div class="image">
-      <the-upload :current-image="preview" v-model="entry.fileId" />
-    </div>
-    <div class="fields">
-      <div class="title">
-        <span>Название</span>
-        <el-input v-model="entry.title" />
+  <el-form
+    label-position="top"
+    class="entry"
+    ref="ruleFormRef"
+    :model="entry"
+    :rules="rules"
+  >
+    <div class="">
+      <div class="flex">
+        <el-form-item class="">
+          <the-upload :current-image="preview" v-model="entry.fileId" />
+        </el-form-item>
+        <div class="w-full">
+          <el-form-item label="Название" prop="title">
+            <el-input v-model="entry.title" />
+          </el-form-item>
+          <el-form-item label="Описание" prop="desc">
+            <el-input v-model="entry.desc" />
+          </el-form-item>
+          <el-form-item label="Слаг" prop="slug">
+            <el-input v-model="entry.slug" />
+          </el-form-item>
+        </div>
       </div>
-      <div class="desc">
-        <span>Описание</span>
-        <el-input v-model="entry.desc" />
+      <el-form-item prop="content">
+        <the-editor class="w-full editor" v-model="entry.content"></the-editor>
+      </el-form-item>
+      <div class="flex justify-between items-center">
+        <el-form-item label="Отдел" prop="departmentId" class="department">
+          <the-select v-model="entry.departmentId" entryOrder="department" />
+        </el-form-item>
+        <el-form-item prop="rubrics" label="Рубрики" class="rubric">
+          <the-select v-model="entry.rubrics" entryOrder="rubric" />
+        </el-form-item>
+        <el-form-item prop="publishedAt" label="Дата публикации" class="date">
+          <el-date-picker v-model="entry.publishedAt" />
+        </el-form-item>
+        <el-form-item class="document flex my-auto">
+          <the-upload-document />
+        </el-form-item>
+        <el-form-item class="my-auto delete">
+          <el-checkbox v-model="entry.isDeleted" label="Удален" border />
+        </el-form-item>
+        <el-form-item class="my-auto pinned">
+          <el-checkbox label="Закрепить" v-model="entry.pinned" border />
+        </el-form-item>
       </div>
-      <div class="slug">
-        <span>Слаг</span>
-        <el-input v-model="entry.slug" />
-      </div>
+      <el-form-item>
+        <el-button @click="submitForm(ruleFormRef)"> Создать </el-button>
+      </el-form-item>
     </div>
-    <div class="editor">
-      <TheEditor v-model="entry.content" />
-    </div>
-    <div class="department">
-      <div>Отдел</div>
-      <the-select v-model="entry.departmentId" entryOrder="department" />
-    </div>
-    <div class="rubric">
-      <div>Рубрики</div>
-      <the-select v-model="entry.rubrics" entryOrder="rubric" />
-    </div>
-    <div class="date">
-      <div>Дата</div>
-      <el-date-picker v-model="entry.publishedAt" />
-    </div>
-    <div class="document">
-      <the-upload-document />
-    </div>
-    <div class="my-auto delete">
-      <el-checkbox v-model="entry.isDeleted" label="Удален" border />
-    </div>
-    <div class="my-auto pinned">
-      <el-checkbox label="Закрепить" v-model="entry.pinned" border />
-    </div>
-    <div class="button">
-      <el-button @click="handleCreateData">Создать</el-button>
-    </div>
-  </div>
+  </el-form>
 </template>
 
 <style scoped lang="scss">
-:deep(.el-input__wrapper) {
+:deep(.el-form-item.is-error .editor) {
+  border: 1px solid #f56c6c;
   border-radius: 10px;
-}
-
-:deep(.el-button) {
-  border-radius: 10px;
+  transition: border 0.5s;
 }
 
 .entry {
@@ -103,74 +141,5 @@ const handleCreateData = async () => {
   border-radius: 10px;
   height: calc(100%);
   padding: 10px 10px;
-
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 2.6fr 0.2fr 0.2fr;
-  gap: 5px 5px;
-  grid-auto-flow: row dense;
-  grid-template-areas:
-    'image fields fields fields fields fields'
-    'editor editor editor editor editor editor'
-    'department rubric date document delete pinned'
-    'button . . . . .';
-}
-
-.editor {
-  grid-area: editor;
-}
-
-.department {
-  grid-area: department;
-}
-
-.rubric {
-  grid-area: rubric;
-}
-
-.date {
-  grid-area: date;
-}
-
-.delete {
-  grid-area: delete;
-}
-
-.document {
-  grid-area: document;
-}
-
-.image {
-  grid-area: image;
-}
-
-.button {
-  grid-area: button;
-}
-
-.fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  gap: 0px 0px;
-  grid-auto-flow: row;
-  grid-template-areas:
-    'title title title title'
-    'desc desc desc desc'
-    'slug slug slug slug';
-
-  grid-area: fields;
-}
-
-.title {
-  grid-area: title;
-}
-
-.slug {
-  grid-area: slug;
-}
-
-.desc {
-  grid-area: desc;
 }
 </style>
