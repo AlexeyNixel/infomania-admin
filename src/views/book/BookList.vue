@@ -17,11 +17,17 @@ const handleNavigate = async () => {
   fetchData();
 };
 
+const handleDelete = async (id: string, status: boolean) => {
+  await bookStore.updateBook(id, { isDeleted: status });
+};
+
 const fetchData = async () => {
   book.value = await bookStore.getBooks({
     page: page.value,
     pageSize: 30,
+    isDeleted: true,
   });
+  console.log(book.value);
 };
 
 onMounted(async () => {
@@ -50,16 +56,16 @@ onMounted(async () => {
           {{ item.title }}
         </router-link>
         <div class="text-center m-auto">
-          {{ dayjs(new Date()).format('DD.MM.YYYY ') }}
+          {{ dayjs(item.createdAt).format('DD.MM.YYYY ') }}
         </div>
-        <!-- <div class="text-center m-auto">
+        <div class="text-center m-auto">
           <el-checkbox
             @change="handleDelete(item.id, item.isDeleted)"
             v-model="item.isDeleted"
             label="Скрыта"
             size="large"
           />
-        </div> -->
+        </div>
         <a
           class="text-center m-auto"
           :href="`http://dev.infomania.ru/document/${item.id}`"

@@ -2,8 +2,10 @@
 import { useEntryStore } from '@/stores/entry';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessage, dayjs, FormInstance, FormRules } from 'element-plus';
+import type { FormInstance, FormRules } from 'element-plus';
+import { ElMessage, dayjs } from 'element-plus';
 import TheEditor from '@/components/ui/TheEditor.vue';
+import AltEditor from '@/components/ui/AltEditor.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
 import TheUpload from '@/components/ui/TheUpload.vue';
 import TheUploadDocument from '@/components/ui/TheUploadDocument.vue';
@@ -37,7 +39,7 @@ const entry = reactive<RuleForm>({
 const rules = reactive<FormRules<RuleForm>>({
   title: [{ required: true, message: 'Обязательное поле' }],
   desc: [{ required: true, message: 'Обязательное поле' }],
-  slug: [{ required: true, message: 'Обязательное поле' }],
+  slug: [{ required: false, message: 'Обязательное поле' }],
   content: [{ required: true, message: 'Обязательное поле' }],
   rubrics: [{ required: true, message: 'Обязательное поле' }],
   fileId: [{ required: true, message: 'Обязательное поле' }],
@@ -51,6 +53,7 @@ const ruleFormRef = ref<FormInstance>();
 const router = useRouter();
 const entryStore = useEntryStore();
 const preview = ref();
+const isAltEditor = ref<boolean>(false);
 
 const submitForm = async (form: FormInstance | undefined) => {
   if (!form) return;
@@ -66,8 +69,12 @@ const submitForm = async (form: FormInstance | undefined) => {
         message: 'Новость создана',
         type: 'success',
       });
+      router.push({ name: 'entries' });
     } else {
-      console.log('false');
+      ElMessage({
+        message: 'Некорректный ввод',
+        type: 'error',
+      });
     }
   });
 };
@@ -99,7 +106,18 @@ const submitForm = async (form: FormInstance | undefined) => {
         </div>
       </div>
       <el-form-item prop="content">
-        <the-editor class="w-full editor" v-model="entry.content"></the-editor>
+        <el-button
+          class="absolute top-1 right-1 z-30"
+          @click="isAltEditor = !isAltEditor"
+        >
+          Алтернативный редактор
+        </el-button>
+        <alt-editor v-if="isAltEditor" v-model="entry.content" />
+        <the-editor
+          v-else
+          class="w-full editor"
+          v-model="entry.content"
+        ></the-editor>
       </el-form-item>
       <div class="flex justify-between items-center">
         <el-form-item label="Отдел" prop="departmentId" class="department">

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useEntryStore } from '@/stores/entry';
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useAdminStore } from '@/stores/admin';
 import { storeToRefs } from 'pinia';
 import { useDark, useToggle } from '@vueuse/core';
+import type { UploadProps, UploadUserFile } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
@@ -54,6 +56,27 @@ const buttons = [
 const entryStore = useEntryStore();
 const adminStore = useAdminStore();
 const { username } = storeToRefs(adminStore);
+const uploadUrl = ref(import.meta.env['VITE_EXHIBITION_UPLOAD_URL']);
+const headers = {
+  Authorization: `Bearer ${localStorage.getItem('token')}`,
+};
+
+const handleExceed: UploadProps['onExceed'] = (files, uploadFiles) => {
+  ElMessage.warning(
+    `The limit is 3, you selected ${files.length} files this time, add up to ${
+      files.length + uploadFiles.length
+    } totally`
+  );
+};
+
+const beforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
+  return ElMessageBox.confirm(
+    `Cancel the transfer of ${uploadFile.name} ?`
+  ).then(
+    () => true,
+    () => false
+  );
+};
 
 onBeforeMount(async () => {
   adminStore.token = localStorage.getItem('token') || '';
@@ -79,7 +102,21 @@ onBeforeMount(async () => {
           </router-link>
         </div>
       </div>
-      <el-button @click="toggleDark()">Темная тема</el-button>
+      <el-button class="mx-2" @click="toggleDark()">Темная тема</el-button>
+      <el-upload
+        class="block w-full text-center text-neutral-800 dark:text-neutral-200"
+        multiple
+        :limit="3"
+        :action="uploadUrl"
+        :headers="headers"
+        :on-exceed="handleExceed"
+      >
+        <div
+          class="ring-1 my-1 mx-2 text-sm w-full ring-neutral-300 dark:ring-neutral-600 px-2 py-[5px] rounded-lg"
+        >
+          Загрузить выставку
+        </div>
+      </el-upload>
     </div>
 
     <div class="main">
@@ -154,5 +191,13 @@ onBeforeMount(async () => {
 
 :deep(.el-input__wrapper) {
   border-radius: 10px;
+}
+
+:deep(.el-button) {
+  border-radius: 8px;
+}
+
+:deep(.el-upload) {
+  width: 100%;
 }
 </style>
