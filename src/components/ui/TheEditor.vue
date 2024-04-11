@@ -11,10 +11,10 @@
 </template>
 
 <script lang="ts" setup>
-// import '@/plugins/ckeditor/ckeditor.js';
 import '@/plugins/ckeditor/ckeditor.js';
 import { uploadAdapter } from '@/utils/uploadAdapter';
 import { ref } from 'vue';
+
 type PropsType = {
   modelValue?: string;
   field?: string;
@@ -23,6 +23,7 @@ type PropsType = {
 
 const editorConfig = ref({
   extraPlugins: [uploadAdapter],
+  extraAllowedContent: 'iframe',
   allowedContent: true,
   // startupMode: 'source',
   mediaEmbed: {
@@ -32,6 +33,9 @@ const editorConfig = ref({
     addTargetToExternalLinks: true,
   },
   image: {
+    insert: {
+      type: 'block',
+    },
     resizeOptions: [
       {
         name: 'resizeImage:original',
@@ -64,11 +68,27 @@ const editorConfig = ref({
         label: '80%',
       },
     ],
-    toolbar: ['resizeImage'],
+    toolbar: [
+      'resizeImage',
+      'insertImage',
+
+      {
+        // Grouping the buttons for the regular
+        // picture-like image styling into one dropdown.
+        name: 'imageStyle:pictures',
+        title: 'Style',
+        items: ['imageStyle:block', 'imageStyle:side'],
+        defaultItem: 'imageStyle:block',
+      },
+      '|',
+      'toggleImageCaption',
+      'linkImage',
+    ],
   },
 });
 //@ts-ignore
 const editor = ClassicEditor;
+
 defineProps<PropsType>();
 
 const emit = defineEmits(['update:modelValue']);

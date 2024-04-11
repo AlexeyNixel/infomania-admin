@@ -6,6 +6,7 @@ import { ref } from 'vue';
 export const useAdminStore = defineStore('admin', () => {
   const token = ref<string>(localStorage.getItem('token') || '');
   const username = ref<string>(localStorage.getItem('username') || '');
+  const nextPage = ref<string>('');
 
   const getAllModel = async (url: string, params?: ParamsType) => {
     const { data } = await axiosApi.get(url, { params });
@@ -13,6 +14,7 @@ export const useAdminStore = defineStore('admin', () => {
   };
 
   return {
+    nextPage,
     token,
     username,
     getAllModel,

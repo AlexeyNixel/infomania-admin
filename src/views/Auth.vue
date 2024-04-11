@@ -26,7 +26,7 @@ const handleAuth = async () => {
     axiosApi.defaults.headers.common[
       'Authorization'
     ] = `Bearer ${adminStore.token}`;
-    await router.push({ name: 'index' });
+    await router.push({ path: localStorage.getItem('nextPage') || '/' });
   } else if (status.value.request.status === 401) {
     isErrorLogin.value = !isErrorLogin.value;
   }
