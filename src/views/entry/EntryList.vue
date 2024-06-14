@@ -51,7 +51,10 @@ onMounted(async () => {
         v-for="entry in entries.data"
       >
         <router-link
-          :to="{ name: 'entryUpdate', params: { slug: entry.id } }"
+          :to="{
+            name: 'entryUpdate',
+            params: { slug: entry.id },
+          }"
           class="col-span-2 my-auto hover:underline"
         >
           {{ entry.title }}
@@ -72,7 +75,9 @@ onMounted(async () => {
           :href="`http://dev.infomania.ru/entry/${entry.slug}`"
           target="_blank"
         >
-          <el-icon><Link /></el-icon>
+          <el-icon>
+            <Link />
+          </el-icon>
         </a>
       </div>
     </div>

@@ -9,7 +9,6 @@ const headers = {
 };
 
 const afterUpload = (val: any) => {
-  console.log(val);
   uploadFile.value = val;
 };
 </script>

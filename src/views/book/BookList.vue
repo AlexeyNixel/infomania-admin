@@ -27,11 +27,10 @@ const fetchData = async () => {
     pageSize: 30,
     isDeleted: true,
   });
-  console.log(book.value);
 };
 
 onMounted(async () => {
-  fetchData();
+  await fetchData();
 });
 </script>
 

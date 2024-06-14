@@ -8,7 +8,6 @@ const notification = ref();
 
 onMounted(async () => {
   notification.value = await notificationStore.getNotifications();
-  console.log(notification.value);
 });
 </script>
 

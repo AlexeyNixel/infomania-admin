@@ -42,6 +42,11 @@ const buttons = [
     create: 'bookCreate',
   },
   {
+    title: 'Подборки книг',
+    list: 'collections',
+    create: 'collectionCreate',
+  },
+  {
     title: 'Афиша',
     list: 'billboard',
     create: 'billboardCreate',
@@ -136,6 +141,7 @@ onBeforeMount(async () => {
 .aside {
   height: 100%;
   width: 15%;
+  overflow-y: scroll;
   background-color: var(--el-bg-color-overlay);
   border-radius: 10px;
   display: flex;

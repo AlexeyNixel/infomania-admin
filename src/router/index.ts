@@ -9,6 +9,7 @@ import { billboardRoute } from '@/router/billboard';
 import { notificationRoute } from './notification';
 import { useAdminStore } from '@/stores/admin';
 import { storeToRefs } from 'pinia';
+import { collectionsRoute } from '@/router/collections';
 
 // const adminStore = useAdminStore();
 // const { nextPage } = storeToRefs(adminStore);
@@ -39,6 +40,7 @@ const router = createRouter({
     ...billboardRoute,
     ...bookRoute,
     ...notificationRoute,
+    ...collectionsRoute,
   ],
 });
 

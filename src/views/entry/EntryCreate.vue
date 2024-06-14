@@ -9,7 +9,7 @@ import AltEditor from '@/components/ui/AltEditor.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
 import TheUpload from '@/components/ui/TheUpload.vue';
 import TheUploadDocument from '@/components/ui/TheUploadDocument.vue';
-
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 interface RuleForm {
   title: string;
   desc: string;
@@ -110,9 +110,10 @@ const submitForm = async (form: FormInstance | undefined) => {
           class="absolute top-1 right-1 z-30"
           @click="isAltEditor = !isAltEditor"
         >
-          Алтернативный редактор
+          Альтернативный редактор
         </el-button>
-        <alt-editor v-if="isAltEditor" v-model="entry.content" />
+        <QuillEditor v-if="isAltEditor" theme="snow"></QuillEditor>
+        <!--        <alt-editor v-if="isAltEditor" v-model="entry.content" />-->
         <the-editor
           v-else
           class="w-full editor"

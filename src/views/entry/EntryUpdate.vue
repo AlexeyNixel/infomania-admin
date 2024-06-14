@@ -54,7 +54,7 @@ const route = useRoute();
 const slug = ref<string | string[]>(route.params.slug);
 const entryStore = useEntryStore();
 const preview = ref<string | undefined>();
-const isAltEditor = ref<boolean>(false);
+const isAltEditor = ref<boolean>((route.query.editor as string) === 'alt');
 
 const submitForm = async (form: FormInstance | undefined) => {
   if (!form) return;
@@ -125,7 +125,7 @@ onMounted(async () => {
       </div>
       <el-form-item prop="content">
         <el-button class="my-2" @click="isAltEditor = !isAltEditor">
-          Алтернативный редактор
+          Альтернативный редактор
         </el-button>
         <alt-editor v-if="isAltEditor" v-model="entry.content" />
         <the-editor
