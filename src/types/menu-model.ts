@@ -5,7 +5,7 @@ export type MenuType = {
   oldId: number;
   title: string;
   isDeleted: boolean;
-  // menuType: MenuType;
+  menuType: string;
   // menuItems: MenuItem;
 };
 

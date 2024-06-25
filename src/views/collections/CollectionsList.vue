@@ -5,6 +5,7 @@ import type { CollectionsType } from '@/types/collections-model';
 import dayjs from 'dayjs';
 import BookOnCollection from '@/components/modals/BookOnCollection.vue';
 import { ElMessage } from 'element-plus';
+import { Link } from '@element-plus/icons-vue';
 
 const asd = dayjs();
 const collectionStore = useCollectionStore();
@@ -36,35 +37,51 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class="collections-table">
+  <div class="entries" v-if="collections">
     <div class="header">
-      <div class="header__item_long header__item">Название</div>
-      <div class="header__item">Книги</div>
-      <div class="header__item">Дата создание</div>
-      <div class="header__item">Статус</div>
+      <div class="title">Подборки книг</div>
+      <el-button @click="$router.push('/collection/create/')" class="btn">
+        Создать
+      </el-button>
     </div>
-    <div class="body">
-      <div class="collection" v-for="item in collections" :key="item.id">
-        <router-link
-          :to="{ name: 'collectionUpdate', params: { id: item.id } }"
+    <el-scrollbar height="100%" class="body">
+      <div
+        class="collection"
+        v-for="collection in collections"
+        :key="collection.id"
+      >
+        <RouterLink
+          :to="'/collection/update/' + collection.id"
           class="collection__item collection__item_long collection__item_link"
         >
-          {{ item.name }}
-        </router-link>
-        <el-button class="collection__item" @click="openModal(item.id)">
-          Показать книги ({{ item.books.length }})
-        </el-button>
+          {{ collection.name }}
+        </RouterLink>
         <div class="collection__item">
-          {{ dayjs(item.createdAt).format('DD.MM.YYYY') }}
+          <el-button @click="openModal(collection.id)">
+            Показать книги ({{ collection.books.length }})
+          </el-button>
+        </div>
+        <div class="collection__item">
+          {{ dayjs(collection.createdAt).format('DD.MM.YYYY') }}
         </div>
         <div class="collection__item">
           <el-checkbox
-            @change="deleteCollection(item.id, item.isDeleted)"
-            v-model="item.isDeleted"
+            @change="deleteCollection(collection.id, collection.isDeleted)"
+            v-model="collection.isDeleted"
+            label="скрыта"
           />
         </div>
+        <a
+          :href="`http://dev.infomania.ru/collection/${collection.id}`"
+          class="collection__item_external"
+          target="_blank"
+        >
+          <el-icon>
+            <Link />
+          </el-icon>
+        </a>
       </div>
-    </div>
+    </el-scrollbar>
     <Teleport to="body">
       <BookOnCollection v-model="isOpen" :collection-id="currentCollection" />
     </Teleport>
@@ -72,31 +89,36 @@ onBeforeMount(async () => {
 </template>
 
 <style scoped lang="scss">
-.collections-table {
-  @apply w-full bg-white dark:bg-neutral-900 h-full rounded-[10px] p-2;
+.entries {
+  @apply h-full w-full bg-white dark:bg-neutral-900 rounded-xl p-4;
+
   .header {
-    @apply flex justify-between;
+    @apply flex items-center;
 
-    &__item {
-      @apply text-center w-[16.66%];
-
-      &_long {
-        @apply w-[50%];
-      }
+    .title {
+      @apply text-2xl font-bold mr-3;
+    }
+    .btn {
+      @apply rounded-xl;
+    }
+    :deep(.el-input__wrapper) {
+      @apply rounded-xl ml-2;
     }
   }
-
   .body {
+    @apply mt-2 h-[90%];
     .collection {
-      @apply flex justify-between items-center odd:bg-neutral-200 dark:odd:bg-neutral-800 p-2 rounded-[10px];
+      @apply flex items-center rounded-xl w-full p-2 odd:bg-neutral-200 dark:odd:bg-neutral-800;
       &__item {
-        @apply w-[16.66%] text-center;
+        @apply w-1/6;
         &_long {
-          @apply w-1/2 text-left;
+          @apply w-1/2;
         }
-
         &_link {
           @apply hover:underline;
+        }
+        &_external {
+          @apply text-black dark:text-white text-3xl flex items-center hover:cursor-pointer hover:text-neutral-600 hover:dark:text-neutral-600;
         }
       }
     }

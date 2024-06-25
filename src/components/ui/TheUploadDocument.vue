@@ -14,17 +14,31 @@ const afterUpload = (val: any) => {
 </script>
 
 <template>
-  <el-upload
-    class="flex my-auto p-0 upload-demo"
-    :action="uploadUrl"
-    :on-success="afterUpload"
-    :limit="3"
-    multiple
-    :headers="headers"
-  >
-    <el-button type="primary"> Загрузить документ </el-button>
-  </el-upload>
-  <el-input v-if="uploadFile" v-model="uploadFile.path" />
+  <div class="w-full">
+    <el-upload
+      class="flex mb-2 w-full p-0 upload-demo"
+      :action="uploadUrl"
+      :on-success="afterUpload"
+      :limit="3"
+      multiple
+      :headers="headers"
+    >
+      <el-button type="primary"> Загрузить документ </el-button>
+    </el-upload>
+    <el-input v-if="uploadFile" v-model="uploadFile.path" />
+  </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+:deep(.el-upload) {
+  @apply w-full;
+}
+
+:deep(.el-button) {
+  @apply w-full;
+}
+
+:deep(.el-upload-list) {
+  @apply hidden;
+}
+</style>

@@ -18,7 +18,6 @@ const menu = reactive<any>({
 
 const handleUpdate = async () => {
   await menuStore.updateMenu(route.params.slug as string, menu);
-  console.log(menu);
 
   for (let item of menuItems.value) {
     menuStore.updateMenuItem(item.id, {

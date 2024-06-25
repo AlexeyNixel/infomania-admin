@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import BookListCollection from '@/components/ui/BookListCollection.vue';
 import { create } from '@/api/collections';
+import { useRouter } from 'vue-router';
 
 interface Collection {
   name?: string;
@@ -11,11 +12,12 @@ interface Collection {
   books: string[];
 }
 
+const router = useRouter();
 const newCollection = ref<Collection>({ books: [] });
 
 const handleCreateCollection = async () => {
   await create(newCollection.value);
-  console.log(newCollection.value);
+  await router.push('/collection');
 };
 </script>
 

@@ -19,10 +19,8 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import '@/assets/ckeditorStyle.css';
 const app = createApp(App);
-import { QuillEditor } from '@vueup/vue-quill';
 
 app.component('VueDatePicker', VueDatePicker);
-app.component('QuillEditor', QuillEditor);
 
 app.use(CKEditor);
 app.use(createPinia());

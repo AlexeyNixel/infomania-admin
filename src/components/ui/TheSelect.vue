@@ -4,6 +4,7 @@ import { useAdminStore } from '@/stores/admin';
 
 type PropsType = {
   entryOrder?: 'department' | 'rubric' | 'menu-item' | 'entry' | 'menu';
+  placeholder?: string;
 };
 
 const props = defineProps<PropsType>();
@@ -47,7 +48,7 @@ onMounted(async () => {
   <el-select
     v-if="props?.entryOrder === 'rubric'"
     multiple
-    placeholder="Выбрать"
+    :placeholder="placeholder || 'Выбрать'"
   >
     <el-option
       v-for="item in content"
@@ -56,7 +57,7 @@ onMounted(async () => {
       :value="item.id"
     />
   </el-select>
-  <el-select v-else placeholder="Выбрать">
+  <el-select v-else :placeholder="placeholder || 'Выбрать'">
     <el-option
       v-for="item in content"
       :key="item.id"
@@ -66,4 +67,8 @@ onMounted(async () => {
   </el-select>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+:deep(.el-select__wrapper) {
+  width: 220px;
+}
+</style>

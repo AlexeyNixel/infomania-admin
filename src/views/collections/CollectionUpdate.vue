@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { onBeforeMount, onMounted, reactive, ref } from 'vue';
+import { onBeforeMount, reactive, ref } from 'vue';
 import BookListCollection from '@/components/ui/BookListCollection.vue';
-import { create, findOne, update } from '@/api/collections';
+import { findOne, update } from '@/api/collections';
 import { useRoute } from 'vue-router';
-import { useBookStore } from '@/stores/book';
 
 interface Collection {
   name?: string;
@@ -25,7 +24,6 @@ const collection = reactive<any>({
 
 const handleUpdateCollection = async () => {
   await update(id.value, collection);
-  console.log(collection);
 };
 
 onBeforeMount(async () => {
