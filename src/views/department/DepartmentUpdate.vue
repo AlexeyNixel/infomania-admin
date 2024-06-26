@@ -45,51 +45,53 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="container">
+  <div class="wrapper">
     <div class="department-update">
-      <div class="department-update__preview">
-        <the-upload :current-image="preview" v-model="department.fileId" />
-      </div>
-      <div class="department-update__text">
-        <div class="department-update__item">
-          <span>Название</span>
-          <el-input v-model="department.title" />
-        </div>
-        <div class="department-update__item">
-          <span>Слаг</span>
-          <el-input v-model="department.slug" />
-        </div>
-        <div class="department-update__item">
-          <el-checkbox label="Удален" v-model="department.isDeleted" border />
-        </div>
-        <div class="department-update__btn">
-          <el-button @click="handleUpdate">Обновить</el-button>
-        </div>
+      <the-upload
+        class="preview"
+        v-model="department.fileId"
+        :current-image="preview"
+      />
+      <div class="fields">
+        <el-input
+          class="fields__item"
+          placeholder="Название"
+          v-model="department.title"
+        />
+        <el-input
+          class="fields__item"
+          placeholder="Слаг"
+          v-model="department.slug"
+        />
+        <el-checkbox
+          class="fields__item"
+          label="удален"
+          v-model="department.isDeleted"
+          border
+        />
+        <el-button class="fields__item" @click="handleUpdate">
+          Создать
+        </el-button>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+.wrapper {
+  @apply h-full flex items-center justify-center;
 }
 
 .department-update {
-  display: flex;
-
-  &__item {
-    margin: 20px 0;
+  @apply flex w-[600px];
+  .preview {
+    @apply h-[300px] w-1/2;
   }
-}
-:deep(.el-checkbox.is-bordered) {
-  border-radius: 10px;
-}
-
-:deep(.el-button) {
-  border-radius: 10px;
+  .fields {
+    @apply flex flex-col w-1/2;
+    &__item {
+      @apply my-2;
+    }
+  }
 }
 </style>

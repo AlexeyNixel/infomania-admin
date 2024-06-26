@@ -46,7 +46,7 @@ onMounted(async () => {
   <div class="entries" v-if="menus">
     <div class="header">
       <div class="title">Меню</div>
-      <el-button @click="router.push('/menus/create/')" class="btn">
+      <el-button @click="router.push('/menu-item/create/')" class="btn">
         Создать
       </el-button>
     </div>

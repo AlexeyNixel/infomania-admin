@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
 import { useSliderStore } from '@/stores/slider';
-import { onMounted, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import TheUploadSlide from '@/components/ui/TheUploadSlide.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
 
@@ -31,86 +31,49 @@ const handleCreateSlide = async () => {
 </script>
 
 <template>
-  <div class="slide">
-    <div class="upload">
-      <the-upload-slide
-        class="slider-update__upload"
-        :current-image="preview"
-        v-model="slide.fileId"
+  <div class="slide-create">
+    <div class="aside">
+      <el-input
+        class="aside__item"
+        placeholder="Название"
+        v-model="slide.title"
       />
+      <el-input class="aside__item" placeholder="Ссылка" v-model="slide.link" />
+      <the-select
+        class="aside__item"
+        entry-order="entry"
+        v-model="slide.entryId"
+      />
+      <el-checkbox label="Удален" border v-model="slide.isDeleted" />
+      <el-button class="aside__item" @click="handleCreateSlide" type="warning">
+        Создать
+      </el-button>
     </div>
-    <div class="title">
-      <div class="slider-update__item">
-        <span>Название</span>
-        <el-input v-model="slide.title" />
-      </div>
-    </div>
-    <div class="link">
-      <div class="slider-update__item">
-        <span>Ссылка</span>
-        <el-input v-model="slide.url" />
-      </div>
-    </div>
-    <div class="entry">
-      <div class="slider-update__item">
-        <div>Новость</div>
-        <the-select entry-order="entry" v-model="slide.entryId" />
-      </div>
-    </div>
-    <div class="my-auto delete">
-      <div class="slider-update__item">
-        <el-checkbox v-model="slide.isDeleted" label="Удален" border />
-      </div>
-    </div>
-    <div class="btn">
-      <div class="button slider-update__btn">
-        <el-button @click="handleCreateSlide">Создать</el-button>
-      </div>
-    </div>
+    <div class="body"><the-upload-slide v-model="slide.fileId" /></div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.slide {
-  margin: 0;
-  background-color: var(--el-bg-color-overlay);
-  border-radius: 10px;
-  height: calc(100%);
-  width: 100%;
-  padding: 10px 10px;
+.slide-create {
+  @apply flex bg-white dark:bg-neutral-900 h-full p-2 rounded-xl;
+  .aside {
+    @apply flex flex-col w-2/12 mr-2;
+    &__item {
+      @apply mb-2;
+    }
+  }
 
-  display: grid;
-  gap: 10px 10px;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 0.5fr 0.1fr 0.1fr;
-  grid-auto-flow: row;
-  grid-template-areas:
-    'upload upload upload upload'
-    'title link entry delete'
-    'btn . . .';
+  .body {
+    @apply w-10/12;
+  }
 }
 
-.upload {
-  grid-area: upload;
+:deep(.el-select__wrapper) {
+  width: 100% !important;
+  margin-bottom: 0.5rem;
 }
 
-.title {
-  grid-area: title;
-}
-
-.link {
-  grid-area: link;
-}
-
-.entry {
-  grid-area: entry;
-}
-
-.delete {
-  grid-area: delete;
-}
-
-.btn {
-  grid-area: btn;
+:deep(.el-button) {
+  @apply mt-4;
 }
 </style>

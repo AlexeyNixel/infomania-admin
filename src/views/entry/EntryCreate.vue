@@ -10,7 +10,7 @@ import TheUploadDocument from '@/components/ui/TheUploadDocument.vue';
 
 const router = useRouter();
 const route = useRoute();
-
+const isAltEditor = ref(!!route.query.editor);
 const entryStore = useEntryStore();
 const preview = ref<string | undefined>();
 
@@ -29,7 +29,7 @@ const newEntry = reactive<any>({
 
 const updateEntry = async () => {
   await entryStore.createEntry(newEntry);
-  router.push('/entries');
+  await router.push('/entries');
   return ElMessage({
     message: 'Новость создана',
     type: 'success',
@@ -42,7 +42,7 @@ const updateEntry = async () => {
     <div class="header">
       <div class="preview">
         <the-upload
-          class="preview__item"
+          class="preview__item_img"
           model-value=""
           :current-image="preview"
         />
@@ -96,8 +96,22 @@ const updateEntry = async () => {
           class="text-group__item"
           placeholder="Слаг"
         />
-        <the-editor v-model="newEntry.content" class="h-[60vh]" />
-        <div class="flex"></div>
+        <div class="editor">
+          <el-button @click="isAltEditor = !isAltEditor" class="editor-alt">
+            Альтернативный эдитор
+          </el-button>
+          <the-editor
+            v-if="!isAltEditor"
+            v-model="newEntry.content"
+            class="h-[60vh]"
+          />
+          <el-input
+            v-else
+            class="h-[60vh]"
+            type="textarea"
+            v-model="newEntry.content"
+          />
+        </div>
       </div>
     </div>
     <div class="body"></div>
@@ -116,6 +130,9 @@ const updateEntry = async () => {
 
       &__item {
         @apply w-full m-0 mb-2;
+        &_img {
+          @apply h-[230px] mb-2;
+        }
       }
     }
 
@@ -124,6 +141,12 @@ const updateEntry = async () => {
 
       &__item {
         @apply mb-2;
+      }
+      .editor-alt {
+        @apply absolute right-6 mt-1 z-20;
+        .editor {
+          @apply relative;
+        }
       }
     }
   }

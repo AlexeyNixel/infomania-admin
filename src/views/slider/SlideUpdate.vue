@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
 import { useSliderStore } from '@/stores/slider';
-import { onMounted, reactive, ref } from 'vue';
+import { onBeforeMount, reactive, ref } from 'vue';
 import TheUploadSlide from '@/components/ui/TheUploadSlide.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
-import type { SliderType } from '@/types/models';
 import { ElMessage } from 'element-plus';
 
 const preview = ref<string>();
@@ -30,10 +29,12 @@ const handleUpdateSlide = async () => {
   await router.push({ name: 'slides' });
 };
 
-onMounted(async () => {
+onBeforeMount(async () => {
   content.value = await sliderStore.getSlide(route.params.slug as string, {
     include: 'image',
   });
+
+  console.log(content.value);
 
   preview.value = content.value?.image.path;
   Object.keys(slide).forEach((key) => {
@@ -43,63 +44,51 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="slider">
-    <div class="slider-update">
-      <div class="slider-update__string">
-        <div class="slider-update__item">
-          <span>Название</span>
-          <el-input v-model="slide.title" />
-        </div>
-        <div class="slider-update__item">
-          <span>Ссылка</span>
-          <el-input v-model="slide.url" />
-        </div>
-        <div class="slider-update__item">
-          <span>Описание</span>
-          <el-input v-model="slide.desc" />
-        </div>
-        <div class="slider-update__item">
-          <div>Новость</div>
-          <the-select entry-order="entry" v-model="slide.entryId" />
-        </div>
-        <div class="slider-update__item" style="width: 10%">
-          <div>Удален</div>
-          <el-switch v-model="slide.isDeleted" />
-        </div>
-      </div>
-      <the-upload-slide
-        class="slider-update__upload"
-        :current-image="preview"
-        v-model="slide.fileId"
+  <div class="slide-create">
+    <div class="aside">
+      <el-input
+        class="aside__item"
+        placeholder="Название"
+        v-model="slide.title"
       />
+      <el-input class="aside__item" placeholder="Ссылка" v-model="slide.link" />
+      <the-select
+        class="aside__item"
+        entry-order="entry"
+        v-model="slide.entryId"
+      />
+      <el-checkbox label="Удален" border v-model="slide.isDeleted" />
+      <el-button class="aside__item" @click="handleUpdateSlide" type="warning">
+        Обновить
+      </el-button>
     </div>
-    <div class="slider-update__btn">
-      <el-button @click="handleUpdateSlide()">Обновить</el-button>
+    <div class="body">
+      <the-upload-slide v-model="slide.fileId" :current-image="preview" />
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.slider {
-  background-color: var(--el-bg-color-overlay);
-  height: calc(100% - 20px);
-  border-radius: 10px;
-  padding: 10px;
+.slide-create {
+  @apply flex bg-white dark:bg-neutral-900 h-full p-2 rounded-xl;
+  .aside {
+    @apply flex flex-col w-2/12 mr-2;
+    &__item {
+      @apply mb-2;
+    }
+  }
+
+  .body {
+    @apply w-10/12;
+  }
 }
 
-.slider-update {
-  &__string {
-    display: flex;
-    justify-content: space-between;
-  }
+:deep(.el-select__wrapper) {
+  width: 100% !important;
+  margin-bottom: 0.5rem;
+}
 
-  &__item {
-    width: 100%;
-    margin: 0 5px;
-  }
-
-  &__upload {
-    margin: 10px 0;
-  }
+:deep(.el-button) {
+  @apply mt-4;
 }
 </style>

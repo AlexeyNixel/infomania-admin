@@ -14,6 +14,7 @@ const route = useRoute();
 const slug = ref<string>(route.params.slug as string);
 const entryStore = useEntryStore();
 const preview = ref<string | undefined>();
+const isAltEditor = ref(!!route.query.editor);
 
 const newEntry = reactive<any>({
   title: '',
@@ -111,7 +112,22 @@ onBeforeMount(async () => {
           class="text-group__item"
           placeholder="Слаг"
         />
-        <the-editor v-model="newEntry.content" class="h-[60vh]" />
+        <div class="editor">
+          <el-button @click="isAltEditor = !isAltEditor" class="editor-alt">
+            Альтернативный эдитор
+          </el-button>
+          <the-editor
+            v-if="!isAltEditor"
+            v-model="newEntry.content"
+            class="h-[60vh]"
+          />
+          <el-input
+            v-else
+            class="h-[60vh]"
+            type="textarea"
+            v-model="newEntry.content"
+          />
+        </div>
         <div class="flex"></div>
       </div>
     </div>
@@ -139,6 +155,12 @@ onBeforeMount(async () => {
 
       &__item {
         @apply mb-2;
+      }
+      .editor-alt {
+        @apply absolute right-6 mt-1 z-20;
+        .editor {
+          @apply relative;
+        }
       }
     }
   }

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useBillboardStore } from '@/stores/billboard';
-import { onMounted, reactive, ref } from 'vue';
+import { onBeforeMount, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import TheEditor from '@/components/ui/TheEditor.vue';
 import { AffichePlaces } from '@/types/models';
 import { ElMessage } from 'element-plus';
+import TheUploadDocument from '@/components/ui/TheUploadDocument.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -23,7 +24,7 @@ const billboard = reactive<any>({
   isDeleted: false,
 });
 
-const handleUpdateDate = async () => {
+const updateBillboard = async () => {
   ElMessage({
     message: 'Афиша обновлена',
     type: 'success',
@@ -32,7 +33,7 @@ const handleUpdateDate = async () => {
   return billboardStore.updateBillboard(slug.value, billboard);
 };
 
-onMounted(async () => {
+onBeforeMount(async () => {
   //@ts-ignore
   const { data } = await billboardStore.getBillboard(slug.value);
   Object.keys(billboard).forEach((key) => {
@@ -42,101 +43,114 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="billboard">
-    <div class="title">
-      <div>Название</div>
-      <el-input v-model="billboard.title" />
-    </div>
-    <div class="phone">
-      <div>Телефон</div>
-      <el-input v-model="billboard.phone" />
-    </div>
-    <div class="slug">
-      <div>Слаг</div>
-      <el-input v-model="billboard.slug" />
-    </div>
-    <div class="editor">
-      <div>Контент</div>
-      <TheEditor v-model="billboard.desc" />
-    </div>
-    <div class="timepicker">
-      <div>Время</div>
-      <el-time-picker
-        format="HH:mm:ss"
-        value-format="YYYY-MM-DDTHH:mm:ss.000+00:00"
-        v-model="billboard.eventTime"
-        placeholder="Время"
-      />
-    </div>
-    <div class="datepicker">
-      <div>Дата</div>
-      <el-date-picker
-        value-format="YYYY-MM-DDTHH:mm:ss.000+00:00"
-        v-model="billboard.eventDate"
-        type="datetime"
-        placeholder="Дата"
-      />
-    </div>
-    <div class="place">
-      <div>Помещение</div>
-      <el-select v-model="billboard.eventPlace" placeholder="Помещение">
-        <el-option
-          v-for="(item, index) in places"
-          :key="index"
-          :label="item"
-          :value="index"
+  <div class="billboard-update">
+    <div class="header">
+      <div class="aside">
+        <el-input
+          v-model="billboard.title"
+          class="aside__item"
+          placeholder="Название"
         />
-      </el-select>
+        <el-input
+          v-model="billboard.phone"
+          class="aside__item"
+          placeholder="Телефон"
+        />
+        <el-input
+          v-model="billboard.slug"
+          class="aside__item"
+          placeholder="Слаг"
+        />
+        <el-select
+          class="aside__item"
+          v-model="billboard.eventPlace"
+          placeholder="Место проведения"
+        >
+          <el-option
+            v-for="(item, index) in places"
+            :key="index"
+            :label="item"
+            :value="index"
+          />
+        </el-select>
+        <el-date-picker
+          class="aside__item"
+          value-format="YYYY-MM-DDTHH:mm:ss.000+00:00"
+          placeholder="Дата проведения"
+          v-model="billboard.eventDate"
+        />
+        <el-time-picker
+          format="HH:mm:ss"
+          value-format="YYYY-MM-DDTHH:mm:ss.000+00:00"
+          v-model="billboard.eventTime"
+          placeholder="Время проведения"
+        />
+        <el-checkbox
+          v-model="billboard.isDeleted"
+          class="aside__item"
+          label="Скрыта"
+          border
+        />
+        <the-upload-document class="aside__item" />
+        <el-button class="aside__item" type="warning" @click="updateBillboard">
+          Обновить
+        </el-button>
+      </div>
+      <div class="text-group">
+        <div class="editor">
+          <the-editor v-model="billboard.desc" class="h-[60vh]" />
+        </div>
+      </div>
     </div>
-    <el-button @click="handleUpdateDate" style="width: max-content">
-      Обновить
-    </el-button>
   </div>
 </template>
 
 <style scoped lang="scss">
-.billboard {
-  margin: 0;
-  background-color: var(--el-bg-color-overlay);
-  border-radius: 10px;
-  height: calc(100%);
-  padding: 10px 10px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  gap: 5px 5px;
-  grid-auto-flow: row dense;
-  grid-template-areas:
-    'title phone slug'
-    'editor editor editor'
-    'timepicker datepicker place';
+.billboard-update {
+  @apply bg-white dark:bg-neutral-900 p-2 rounded-xl h-full;
+  .header {
+    @apply flex;
+
+    .aside {
+      @apply w-2/12 mr-2;
+
+      &__item {
+        @apply w-full m-0 mb-2;
+        &_img {
+          @apply h-[230px] mb-2;
+        }
+      }
+    }
+
+    .text-group {
+      @apply w-full;
+
+      &__item {
+        @apply mb-2;
+      }
+      .editor-alt {
+        @apply absolute right-6 mt-1 z-20;
+        .editor {
+          @apply relative;
+        }
+      }
+    }
+  }
 }
 
-.title {
-  grid-area: title;
+:deep(.el-input__wrapper) {
+  @apply rounded-xl w-full;
 }
 
-.phone {
-  grid-area: phone;
+:deep(.el-select__wrapper) {
+  @apply rounded-xl w-full;
 }
 
-.slug {
-  grid-area: slug;
+:deep(.el-input) {
+  @apply rounded-xl w-full mb-2;
 }
 
-.editor {
-  grid-area: editor;
-}
-
-.timepicker {
-  grid-area: timepicker;
-}
-
-.datepicker {
-  grid-area: datepicker;
-}
-
-.place {
-  grid-area: place;
+:deep(.el-checkbox) {
+  @apply rounded-xl;
 }
 </style>
