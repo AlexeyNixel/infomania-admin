@@ -1,6 +1,11 @@
 import './assets/main.css';
 import './assets/theme.css';
 import './index.css';
+import '@/assets/theme.css';
+import 'element-plus/dist/index.css';
+import 'element-plus/theme-chalk/dark/css-vars.css';
+import '@vuepic/vue-datepicker/dist/main.css';
+import '@/assets/ckeditorStyle.css';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';

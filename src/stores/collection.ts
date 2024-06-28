@@ -5,7 +5,6 @@ import type { ParamsType } from '@/types/models';
 export const useCollectionStore = defineStore('collection', () => {
   const getOne = async (id: string, params?: ParamsType) => {
     return await findOne(id, params);
-    s;
   };
 
   const getAll = async (params?: ParamsType) => {

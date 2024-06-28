@@ -14,15 +14,13 @@
     "@ckeditor/ckeditor5-build-balloon": "^40.2.0",
     "@ckeditor/ckeditor5-build-classic": "^34.2.0",
     "@ckeditor/ckeditor5-vue": "^4.0.1",
-    "@vuepic/vue-datepicker": "^7.3.0",
     "@vueuse/core": "^10.5.0",
-    "axios": "^1.6.0",
+    "axios": "^1.5.0",
     "ckeditor5-custom-build": "file:ckeditor5",
     "dayjs": "^1.11.9",
     "element-plus": "^2.7.5",
     "pinia": "^2.1.6",
     "prettier": "^3.0.3",
-    "slugify": "^1.6.6",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4",
     "vuedraggable": "^4.1.0"
@@ -44,7 +42,7 @@
     "sass": "^1.53.0",
     "tailwindcss": "^3.4.4",
     "typescript": "~5.1.6",
-    "vite": "^5.3.1",
+    "vite": "^4.4.9",
     "vitest": "^0.34.4",
     "vue-tsc": "^1.8.11"
   }

@@ -12,7 +12,7 @@ const router = useRouter();
 const route = useRoute();
 const isAltEditor = ref(!!route.query.editor);
 const entryStore = useEntryStore();
-const preview = ref<string | undefined>();
+const aside = ref<string | undefined>();
 
 const newEntry = reactive<any>({
   title: '',
@@ -40,43 +40,43 @@ const updateEntry = async () => {
 <template>
   <div class="entry-update">
     <div class="header">
-      <div class="preview">
+      <div class="aside">
         <the-upload
-          class="preview__item_img"
-          model-value=""
-          :current-image="preview"
+          class="aside__item_img"
+          v-model="newEntry.fileId"
+          :current-image="aside"
         />
         <the-select
-          class="preview__item"
+          class="aside__item"
           placeholder="Выбрать отдел"
           v-model="newEntry.departmentId"
           entryOrder="department"
         />
         <the-select
-          class="preview__item"
+          class="aside__item"
           v-model="newEntry.rubrics"
           placeholder="Выбрать рубрику"
           entryOrder="rubric"
         />
         <el-date-picker
-          class="preview__item"
+          class="aside__item"
           placeholder="Дата публикации"
           v-model="newEntry.publishedAt"
         />
         <el-checkbox
           v-model="newEntry.isDeleted"
-          class="preview__item"
+          class="aside__item"
           label="Скрыта"
           border
         />
         <el-checkbox
           v-model="newEntry.pinned"
-          class="preview__item"
+          class="aside__item"
           label="Закреплена"
           border
         />
-        <the-upload-document class="preview__item" />
-        <el-button class="preview__item" type="warning" @click="updateEntry">
+        <the-upload-document class="aside__item" />
+        <el-button class="aside__item" type="warning" @click="updateEntry">
           Создать
         </el-button>
       </div>
@@ -125,7 +125,7 @@ const updateEntry = async () => {
   .header {
     @apply flex;
 
-    .preview {
+    .aside {
       @apply w-2/12 mr-2;
 
       &__item {

@@ -17,7 +17,7 @@ const places = [
   'Центр организации образовательных программ',
 ];
 
-const book = reactive({
+const book = reactive<any>({
   title: '',
   desc: '',
   content: '',
@@ -37,7 +37,7 @@ const handleUpdate = async () => {
 onMounted(async () => {
   const { data } = await bookStore.getBook(route.params.slug as string);
   preview.value = data.preview.path;
-  Object.keys(book).forEach((key) => {
+  Object.keys(book).forEach((key: any) => {
     book[key] = data[key];
   });
 });
