@@ -22,7 +22,7 @@ const newEntry = reactive<any>({
   fileId: '',
   rubrics: [],
   departmentId: '',
-  publishedAt: '',
+  publishedAt: new Date(),
   isDeleted: false,
   pinned: false,
 });
@@ -153,7 +153,7 @@ const updateEntry = async () => {
 }
 
 :deep(.el-input__wrapper) {
-  @apply rounded-xl w-full text-lg;
+  @apply rounded-xl w-full;
 }
 
 :deep(.el-select__wrapper) {

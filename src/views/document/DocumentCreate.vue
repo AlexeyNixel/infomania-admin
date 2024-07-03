@@ -3,11 +3,9 @@ import TheEditor from '@/components/ui/TheEditor.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
 import TheUploadDocument from '@/components/ui/TheUploadDocument.vue';
 import { useDocumentStore } from '@/stores/document';
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 
 const documentStore = useDocumentStore();
-const content = ref<any>();
-const menus = ref<any>();
 
 const document = reactive({
   title: '',
@@ -22,43 +20,53 @@ const handleCreate = async () => {
 </script>
 
 <template>
-  <div class="document-update">
-    <div class="document-update__item">
-      <p>Название</p>
-      <el-input v-model="document.title" />
+  <div class="document-create">
+    <div class="aside">
+      <el-input
+        v-model="document.title"
+        class="aside__item"
+        placeholder="Заголовок"
+      />
+      <the-select
+        v-model="document.menuItemId"
+        entry-order="menu-item"
+        placeholder="Меню"
+      />
+      <the-upload-document class="aside__item" />
+      <el-button class="aside__item" @click="handleCreate" type="warning">
+        Создать
+      </el-button>
     </div>
-    <div class="document-update__item">
+    <div class="main">
       <the-editor v-model="document.content" />
-    </div>
-    <div class="flex">
-      <div class="document-update__item">
-        <div>Меню</div>
-        <the-select entry-order="menu-item" v-model="document.menuItemId" />
-      </div>
-      <div class="document-update__item">
-        <div class="document">
-          <the-upload-document />
-        </div>
-      </div>
-    </div>
-    <div class="document-update__item">
-      <el-button @click="handleCreate">Создать</el-button>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.document-update {
-  background-color: var(--el-bg-color-overlay);
-  height: 100%;
-  border-radius: 10px;
+.document-create {
+  @apply flex h-full bg-white dark:bg-neutral-900 p-2 rounded-xl;
+  .aside {
+    @apply w-2/12 mr-2;
+    &__item {
+      @apply mb-2 w-full rounded-xl;
+    }
+  }
 
-  &__item {
-    padding: 20px;
+  .main {
+    @apply w-10/12;
   }
 }
 
+:deep(.el-select__wrapper) {
+  @apply rounded-xl w-full mb-2;
+}
+
+:deep(.el-input__wrapper) {
+  @apply rounded-xl w-full;
+}
+
 :deep(.el-button) {
-  border-radius: 10px;
+  @apply rounded-xl;
 }
 </style>

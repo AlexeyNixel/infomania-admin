@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue';
 import TheUpload from '@/components/ui/TheUpload.vue';
 import { useBookStore } from '@/stores/book';
 import { useRouter } from 'vue-router';
+import TheEditor from '@/components/ui/TheEditor.vue';
 
 const bookStore = useBookStore();
 const router = useRouter();
@@ -52,13 +53,14 @@ const createBook = async () => {
           type="textarea"
           placeholder="Краткое описание"
         />
-        <el-input
-          v-model="book.content"
-          class="fields__item"
-          rows="3"
-          type="textarea"
-          placeholder="Полное описание"
-        />
+        <the-editor v-model="book.content" class="w-full" />
+        <!--        <el-input-->
+        <!--          v-model="book.content"-->
+        <!--          class="fields__item"-->
+        <!--          rows="3"-->
+        <!--          type="textarea"-->
+        <!--          placeholder="Полное описание"-->
+        <!--        />-->
         <el-input
           v-model="book.link"
           class="fields__item"
@@ -92,8 +94,9 @@ const createBook = async () => {
   @apply flex items-center justify-center h-full w-full;
 }
 .book-create {
-  @apply flex w-2/5;
+  @apply flex;
   .fields {
+    @apply w-full;
     &__item {
       @apply mb-4;
     }

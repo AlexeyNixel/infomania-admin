@@ -73,8 +73,6 @@ const editorConfig = ref({
       'insertImage',
 
       {
-        // Grouping the buttons for the regular
-        // picture-like image styling into one dropdown.
         name: 'imageStyle:pictures',
         title: 'Style',
         items: ['imageStyle:block', 'imageStyle:side'],
@@ -89,6 +87,10 @@ const editorConfig = ref({
 //@ts-ignore
 const editor = ClassicEditor;
 
+editor.create({
+  toolbar: ['heading', 'bold', 'italic', 'numberedList', 'bulletedList'],
+});
+
 defineProps<PropsType>();
 
 const emit = defineEmits(['update:modelValue']);
@@ -102,7 +104,7 @@ const handleChangeValue = (value: string) => {
 :deep(.ck.ck-editor__main > .ck-editor__editable) {
   background-color: var(--ck-editor-header-bg);
   border: 1px solid #4c4d4f;
-  height: 80vh;
+  max-height: 75vh;
   border-radius: 0 0 10px 10px;
 }
 

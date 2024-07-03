@@ -167,7 +167,7 @@ onBeforeMount(async () => {
 }
 
 :deep(.el-input__wrapper) {
-  @apply rounded-xl w-full text-lg;
+  @apply rounded-xl w-full;
 }
 
 :deep(.el-select__wrapper) {

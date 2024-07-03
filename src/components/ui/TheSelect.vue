@@ -69,6 +69,6 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 :deep(.el-select__wrapper) {
-  width: 220px;
+  width: 100%;
 }
 </style>
