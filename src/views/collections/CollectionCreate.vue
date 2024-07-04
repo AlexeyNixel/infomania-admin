@@ -3,70 +3,95 @@ import { ref } from 'vue';
 import BookListCollection from '@/components/ui/BookListCollection.vue';
 import { create } from '@/api/collections';
 import { useRouter } from 'vue-router';
+import TheUpload from '@/components/ui/TheUpload.vue';
+import { ElMessage } from 'element-plus';
 
 interface Collection {
-  name?: string;
-  description?: string;
-  isDeleted?: boolean;
-  fileId?: string;
+  name: string;
+  description: string;
+  isDeleted: boolean;
+  fileId: string;
   books: string[];
 }
 
 const router = useRouter();
-const newCollection = ref<Collection>({ books: [] });
+const newCollection = ref<any>({ books: [] });
 
 const handleCreateCollection = async () => {
   await create(newCollection.value);
-  await router.push('/collection');
+  await router.push('/collections');
+  return ElMessage({
+    message: 'Подборка обнавлена',
+    type: 'success',
+  });
 };
 </script>
 
 <template>
-  <div class="collection">
-    <div class="header collection__header">
-      <div class="header__item title">
-        <el-input
-          v-model="newCollection.name"
-          placeholder="Название подборки"
-          size="large"
-        />
-      </div>
-      <div class="header__item description">
-        <el-input
-          v-model="newCollection.description"
-          placeholder="Описание подборки"
-          size="large"
-        />
-      </div>
+  <div class="collections">
+    <div class="aside">
+      <the-upload
+        class="aside__item aside__item_preview"
+        v-model="newCollection.fileId"
+      />
+      <el-input
+        placeholder="Название"
+        class="aside__item"
+        v-model="newCollection.name"
+      />
+      <el-input
+        placeholder="Описание"
+        class="aside__item"
+        v-model="newCollection.description"
+      />
+      <el-checkbox
+        border
+        label="Скрыт"
+        class="aside__item"
+        v-model="newCollection.isDeleted"
+      />
+      <el-button
+        class="aside__item"
+        type="warning"
+        @click="handleCreateCollection"
+      >
+        Сохранить
+      </el-button>
     </div>
-    <div class="collection__body">
+    <div class="main">
       <BookListCollection v-model="newCollection.books" />
-    </div>
-    <div class="collection__footer">
-      <el-button @click="handleCreateCollection">Создать</el-button>
-      <el-checkbox v-model="newCollection.isDeleted"> Удалить </el-checkbox>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.collection {
-  @apply p-2;
-  .header {
-    &__item {
-      @apply mb-2;
-    }
-    .title {
-      @apply text-xl font-bold ring-0 focus:ring-0;
-    }
+.collections {
+  @apply flex bg-white dark:bg-neutral-900 h-full rounded-xl p-2;
 
-    :deep(.el-input__wrapper) {
-      border: 0;
-      box-shadow: none;
-      font-size: 24px;
-      background: transparent;
-      color: black;
+  .aside {
+    @apply w-2/12;
+    &__item {
+      @apply mb-2 w-full rounded-xl;
+      &_preview {
+        @apply h-[200px];
+      }
     }
   }
+
+  .main {
+    @apply w-10/12;
+  }
+}
+
+:deep(.el-select__wrapper) {
+  @apply rounded-xl w-full mb-2;
+}
+
+:deep(.el-input__wrapper) {
+  @apply rounded-xl w-full;
+}
+
+:deep(.el-button) {
+  @apply rounded-xl;
 }
 </style>

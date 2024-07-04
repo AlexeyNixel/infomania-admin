@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useBookStore } from '@/stores/book';
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import type { BookResponse } from '@/types/book-model';
 
 interface Props {
@@ -34,7 +34,7 @@ const addBookToCollection = (book: string) => {
 const handleNavigate = async () => {
   books.value = await bookStore.getBooks({
     include: 'preview',
-    pageSize: 12,
+    pageSize: 10,
     page: page.value,
   });
 };
@@ -45,7 +45,7 @@ onBeforeMount(async () => {
   }
   books.value = await bookStore.getBooks({
     include: 'preview',
-    pageSize: 12,
+    pageSize: 10,
   });
 });
 </script>
@@ -89,7 +89,7 @@ onBeforeMount(async () => {
 
 <style scoped lang="scss">
 .books {
-  @apply grid grid-cols-6 gap-6 p-4;
+  @apply grid grid-cols-5 gap-6 mx-2;
 
   .book-card {
     @apply flex flex-col relative justify-center items-center;
