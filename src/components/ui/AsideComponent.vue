@@ -3,6 +3,8 @@ import { useAdminStore } from '@/stores/admin';
 import { onBeforeMount, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useDark, useToggle } from '@vueuse/core';
+import axios from 'axios';
+import { axiosApi } from '@/api/axios';
 
 const links = [
   {
@@ -40,10 +42,32 @@ const links = [
 ];
 const generalStore = useAdminStore();
 const { username } = storeToRefs(generalStore);
+const isVideoUpload = ref(false);
+const link = ref<string>('');
 
 const uploadUrl = ref(import.meta.env['VITE_EXHIBITION_UPLOAD_URL']);
+const apiKey = ref(import.meta.env['VITE_API_KEY_YOUTUBE']);
+
 const headers = {
   Authorization: `Bearer ${localStorage.getItem('token')}`,
+};
+
+const uploadVideo = async () => {
+  const id = link.value.slice(32);
+  const { data } = await axios.get(
+    `https://www.googleapis.com/youtube/v3/videos?part=id%2C+snippet`,
+    {
+      params: {
+        id: id,
+        key: apiKey.value,
+      },
+    }
+  );
+  const videoData = data.items[0].snippet.localized;
+  videoData['preview'] = data.items[0].snippet.thumbnails.standard.url;
+  videoData['url'] = link.value;
+  console.log(videoData);
+  await axiosApi.post('/api/video', { ...videoData });
 };
 
 const isDark = useDark();
@@ -66,6 +90,18 @@ onBeforeMount(async () => {});
     >
       {{ link.title }}
     </RouterLink>
+    <el-button class="link" link @click="isVideoUpload = !isVideoUpload">
+      Видео
+    </el-button>
+    <div v-if="isVideoUpload" class="video-upload">
+      <el-input
+        @keydown.enter="uploadVideo"
+        v-model="link"
+        placeholder="Ссылка на видео"
+        autofocus
+      />
+    </div>
+
     <el-upload multiple :limit="3" :action="uploadUrl" :headers="headers">
       <div class="link">Загрузить выставку</div>
     </el-upload>
@@ -84,6 +120,7 @@ onBeforeMount(async () => {});
       @apply text-4xl font-bold;
     }
   }
+
   .link {
     @apply block my-2 text-xl hover:underline transition;
   }
