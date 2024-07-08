@@ -90,9 +90,7 @@ onBeforeMount(async () => {});
     >
       {{ link.title }}
     </RouterLink>
-    <el-button class="link" link @click="isVideoUpload = !isVideoUpload">
-      Видео
-    </el-button>
+    <div class="link" link @click="isVideoUpload = !isVideoUpload">Видео</div>
     <div v-if="isVideoUpload" class="video-upload">
       <el-input
         @keydown.enter="uploadVideo"
@@ -122,7 +120,11 @@ onBeforeMount(async () => {});
   }
 
   .link {
-    @apply block my-2 text-xl hover:underline transition;
+    @apply block my-2 text-xl hover:underline transition cursor-pointer;
   }
+}
+
+:deep(.el-button) {
+  @apply m-0 p-0;
 }
 </style>
