@@ -8,6 +8,7 @@ import { menuRoute } from '@/router/menu';
 import { billboardRoute } from '@/router/billboard';
 import { notificationRoute } from './notification';
 import { collectionsRoute } from '@/router/collections';
+import { videoRoute } from '@/router/video';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,6 +37,7 @@ const router = createRouter({
     ...bookRoute,
     ...notificationRoute,
     ...collectionsRoute,
+    ...videoRoute,
   ],
 });
 

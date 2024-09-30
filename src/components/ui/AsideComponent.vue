@@ -39,6 +39,10 @@ const links = [
     title: 'Афиша',
     value: '/billboard',
   },
+  {
+    title: 'Видео',
+    value: '/video',
+  },
 ];
 const generalStore = useAdminStore();
 const { username } = storeToRefs(generalStore);
@@ -66,7 +70,6 @@ const uploadVideo = async () => {
   const videoData = data.items[0].snippet.localized;
   videoData['preview'] = data.items[0].snippet.thumbnails.standard.url;
   videoData['url'] = link.value;
-  console.log(videoData);
   await axiosApi.post('/api/video', { ...videoData });
 };
 
@@ -79,7 +82,7 @@ onBeforeMount(async () => {});
 <template>
   <div class="aside">
     <div class="header">
-      <div class="logo">INFOMANIA</div>
+      <a href="http://dev.infomania.ru" class="logo">INFOMANIA</a>
       <div class="user">{{ username }}</div>
     </div>
     <RouterLink
@@ -90,15 +93,6 @@ onBeforeMount(async () => {});
     >
       {{ link.title }}
     </RouterLink>
-    <div class="link" link @click="isVideoUpload = !isVideoUpload">Видео</div>
-    <div v-if="isVideoUpload" class="video-upload">
-      <el-input
-        @keydown.enter="uploadVideo"
-        v-model="link"
-        placeholder="Ссылка на видео"
-        autofocus
-      />
-    </div>
 
     <el-upload multiple :limit="3" :action="uploadUrl" :headers="headers">
       <div class="link">Загрузить выставку</div>

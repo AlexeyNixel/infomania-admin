@@ -1,4 +1,3 @@
-import { axiosApi } from './../api/axios';
 import slugify from 'slugify';
 
 class UploadAdapter {

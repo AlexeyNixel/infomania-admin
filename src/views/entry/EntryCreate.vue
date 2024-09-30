@@ -7,6 +7,7 @@ import TheEditor from '@/components/ui/TheEditor.vue';
 import TheSelect from '@/components/ui/TheSelect.vue';
 import TheUpload from '@/components/ui/TheUpload.vue';
 import TheUploadDocument from '@/components/ui/TheUploadDocument.vue';
+import { Quill } from '@vueup/vue-quill';
 
 const router = useRouter();
 const route = useRoute();
@@ -25,6 +26,34 @@ const newEntry = reactive<any>({
   publishedAt: new Date(),
   isDeleted: false,
   pinned: false,
+});
+
+const toolbarOptions = [
+  ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+  ['blockquote', 'code-block'],
+  ['link', 'image', 'video', 'formula'],
+
+  [{ header: 1 }, { header: 2 }], // custom button values
+  [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
+  [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+  [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+  [{ direction: 'rtl' }], // text direction
+
+  [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+  [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+  [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+  [{ font: [] }],
+  [{ align: [] }],
+
+  ['clean'], // remove formatting button
+];
+
+const quill = new Quill('#editor', {
+  modules: {
+    toolbar: toolbarOptions,
+  },
+  theme: 'snow',
 });
 
 const updateEntry = async () => {
@@ -80,6 +109,7 @@ const updateEntry = async () => {
           Создать
         </el-button>
       </div>
+
       <div class="text-group">
         <el-input
           v-model="newEntry.title"
@@ -105,16 +135,28 @@ const updateEntry = async () => {
             v-model="newEntry.content"
             class="h-[60vh]"
           />
-          <el-input
-            v-else
-            class="h-[60vh]"
-            type="textarea"
-            v-model="newEntry.content"
-          />
+          <quill-editor toolbar="#my-toolbar" v-else theme="snow">
+            <template #toolbar>
+              <div id="my-toolbar">
+                <!-- Add buttons as you would before -->
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+
+                <!-- But you can also add your own -->
+                <button id="custom-button"></button>
+              </div>
+            </template>
+          </quill-editor>
+          <!--          <el-input-->
+          <!--           -->
+          <!--            class="h-[60vh]"-->
+          <!--            type="textarea"-->
+          <!--            v-model="newEntry.content"-->
+          <!--          />-->
         </div>
       </div>
     </div>
-    <div class="body"></div>
+
     <div class="footer"></div>
   </div>
 </template>

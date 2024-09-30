@@ -33,6 +33,7 @@ const handleChangeValue = (value: string) => {
 };
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+  console.log(rawFile);
   newName.value = slugify(rawFile.name, {
     replacement: '-',
     remove: /\.,?!\+=\*:;/g,
@@ -53,6 +54,7 @@ watch(props, () => {
     <el-upload
       class="upload"
       :action="uploadUrl"
+      :http-request="(e) => console.log(e)"
       :data="{ filename: newName }"
       accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.PBG,.GIF,.BMP,.PDF"
       :show-file-list="false"

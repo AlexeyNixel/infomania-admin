@@ -55,6 +55,7 @@ onBeforeMount(async () => {
     </div>
     <div class="main">
       <the-editor v-model="document.content" />
+      <el-input v-model="document.content" rows="10" type="textarea" />
     </div>
   </div>
 </template>

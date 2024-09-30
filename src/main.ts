@@ -4,8 +4,8 @@ import './index.css';
 import '@/assets/theme.css';
 import 'element-plus/dist/index.css';
 import 'element-plus/theme-chalk/dark/css-vars.css';
-import '@vuepic/vue-datepicker/dist/main.css';
 import '@/assets/ckeditorStyle.css';
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
@@ -14,14 +14,14 @@ import App from './App.vue';
 import router from './router';
 
 import ElementPlus from 'element-plus';
-import VueDatePicker from '@vuepic/vue-datepicker';
 
 // @ts-ignore
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import '@/assets/ckeditorStyle.css';
+import { QuillEditor } from '@vueup/vue-quill';
 const app = createApp(App);
 
-app.component('VueDatePicker', VueDatePicker);
+app.component('QuillEditor', QuillEditor);
 
 app.use(CKEditor);
 app.use(createPinia());
